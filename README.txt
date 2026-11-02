@@ -7,6 +7,9 @@ Learning Hub - GitHub Pages package
 
 All pages must be in the same folder so the navigation links work.
 
+Labs > Hand Massage 3D (Home Economics): learn 7 steps, then practice by dragging the tools in 3 levels.
+It needs no internet libraries, so it also works offline.
+
 How quiz progress reaches the class record:
 - Students type their name, then take a quiz. The result is saved in that browser.
 - On the SAME device, Records > Quiz progress shows it automatically.
