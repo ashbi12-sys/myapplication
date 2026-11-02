@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Interactive Labs | Learning Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<header class="top"><div class="wrap">
+<a class="brand" href="index.html">Learning Hub</a>
+<nav aria-label="Main"><a href="index.html">Home</a><a href="quiz.html">Quizzes</a><a href="labs.html" aria-current="page">Labs</a><a href="games.html">Games</a></nav>
+</div></header>
+<main class="wrap">
+<h1>Interactive Labs</h1>
+<p class="lead">Experiment with real numbers and see the result right away.</p>
+<div class="tabs" id="tabs" role="tablist"></div>
+<section class="panel" id="panel"></section>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+
+function binary(el){
+  let bits=[0,0,0,0,0,0,0,0];
+  el.innerHTML=`<h2>Binary Lab (ICT)</h2><p>Computers count with 0s and 1s. Tap a bit to flip it.</p><div class="bits" id="bits"></div><div class="big" id="dec"></div><div id="eq"></div><label for="n">Or type a number from 0 to 255</label><input id="n" type="number" min="0" max="255">`;
+  const draw=()=>{
+    $("bits").innerHTML="";
+    bits.forEach((b,i)=>{
+      const v=128>>i,btn=document.createElement("button");
+      btn.className="bit"+(b?" on":"");btn.innerHTML=`<small>${v}</small><b>${b}</b>`;
+      btn.setAttribute("aria-label","Bit worth "+v+", currently "+b);
+      btn.onclick=()=>{bits[i]=1-bits[i];draw()};$("bits").append(btn);
+    });
+    const parts=bits.map((b,i)=>b?128>>i:0).filter(Boolean),sum=parts.reduce((a,b)=>a+b,0);
+    $("dec").textContent=sum;
+    $("eq").textContent=parts.length?parts.join(" + ")+" = "+sum:"All bits are off, so the value is 0.";
+  };
+  $("n").oninput=e=>{const v=Math.max(0,Math.min(255,parseInt(e.target.value)||0));bits=v.toString(2).padStart(8,"0").split("").map(Number);draw()};
+  draw();
+}
+
+function recipe(el){
+  el.innerHTML=`<h2>Recipe Scaler (Home Economics)</h2><p>Change the number of servings and every ingredient adjusts.</p>
+  <div class="cols"><div><label for="o">Recipe makes</label><input id="o" type="number" min="1" value="4"></div><div><label for="d">You need</label><input id="d" type="number" min="1" value="10"></div></div>
+  <label for="ing">Ingredients (one per line, start with the amount)</label><textarea id="ing">2 cups rice\n1/2 tsp salt\n1 1/2 tbsp cooking oil\n3 cloves garlic</textarea>
+  <div class="out"><b>Scaled ingredients</b><ul id="res"></ul></div>`;
+  const fmt=n=>String(Math.round(n*100)/100);
+  const num=s=>{s=s.trim();let m=s.match(/^(\d+)\s+(\d+)\/(\d+)$/);if(m)return +m[1]+m[2]/m[3];m=s.match(/^(\d+)\/(\d+)$/);return m?m[1]/m[2]:parseFloat(s)};
+  const run=()=>{
+    const f=(+$("d").value||0)/(+$("o").value||1);
+    $("res").innerHTML=$("ing").value.split("\n").filter(l=>l.trim()).map(l=>{
+      const m=l.match(/^\s*(\d+\s+\d+\/\d+|\d+\/\d+|\d*\.?\d+)\s*(.*)$/);
+      return "<li>"+(m?fmt(num(m[1])*f)+" "+m[2]:l)+"</li>";
+    }).join("");
+  };
+  ["o","d","ing"].forEach(i=>$(i).oninput=run);run();
+}
+
+function measure(el){
+  const U={mm:1,cm:10,m:1000,in:25.4,ft:304.8};
+  const opts=k=>Object.keys(U).map(u=>`<option ${u===k?"selected":""}>${u}</option>`).join("");
+  el.innerHTML=`<h2>Measurement Converter (Industrial Arts)</h2><p>Convert between metric and inch units before you cut.</p>
+  <div class="cols"><div><label for="v">Value</label><input id="v" type="number" value="2.5" step="any"></div><div><label for="f">From</label><select id="f">${opts("m")}</select></div><div><label for="t">To</label><select id="t">${opts("cm")}</select></div></div>
+  <div class="out"><div class="big" id="r"></div><div id="note"></div></div>`;
+  const run=()=>{
+    const mm=(+$("v").value||0)*U[$("f").value],r=mm/U[$("t").value];
+    $("r").textContent=(Math.round(r*1000)/1000)+" "+$("t").value;
+    $("note").textContent="That equals "+(Math.round(mm/25.4*100)/100)+" inches or "+(Math.round(mm/10*100)/100)+" cm.";
+  };
+  ["v","f","t"].forEach(i=>$(i).oninput=run);run();
+}
+
+function planting(el){
+  el.innerHTML=`<h2>Planting Calculator (Agri-Fishery Arts)</h2><p>Estimate how many seedlings your garden plot needs.</p>
+  <div class="cols"><div><label for="L">Plot length (m)</label><input id="L" type="number" value="10" min="1" step="any"></div><div><label for="W">Plot width (m)</label><input id="W" type="number" value="4" min="1" step="any"></div></div>
+  <div class="cols"><div><label for="rs">Space between rows (cm)</label><input id="rs" type="number" value="50" min="5"></div><div><label for="ps">Space between plants (cm)</label><input id="ps" type="number" value="30" min="5"></div></div>
+  <div class="out"><div class="big" id="tot"></div><div id="det"></div></div>`;
+  const run=()=>{
+    const rows=Math.floor(($("W").value*100)/($("rs").value||1)),per=Math.floor(($("L").value*100)/($("ps").value||1));
+    $("tot").textContent=(rows*per)+" seedlings";
+    $("det").textContent=rows+" rows with "+per+" plants per row on a "+($("L").value*$("W").value)+" square meter plot.";
+  };
+  ["L","W","rs","ps"].forEach(i=>$(i).oninput=run);run();
+}
+
+const LABS=[{n:"💻 Binary",f:binary},{n:"🍳 Recipe Scaler",f:recipe},{n:"📏 Measurement",f:measure},{n:"🌱 Planting",f:planting}];
+LABS.forEach((l,i)=>{
+  const b=document.createElement("button");b.className="tab";b.setAttribute("role","tab");b.textContent=l.n;
+  b.onclick=()=>{document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-selected",t===b));l.f($("panel"))};
+  $("tabs").append(b);
+  if(!i)b.click();
+});
+</script>
+</body>
+</html>

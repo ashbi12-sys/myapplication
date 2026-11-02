@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fun Games | Learning Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<header class="top"><div class="wrap">
+<a class="brand" href="index.html">Learning Hub</a>
+<nav aria-label="Main"><a href="index.html">Home</a><a href="quiz.html">Quizzes</a><a href="labs.html">Labs</a><a href="games.html" aria-current="page">Games</a></nav>
+</div></header>
+<main class="wrap">
+<h1>Fun Games</h1>
+<p class="lead">Learn vocabulary from every subject while you play.</p>
+<div class="tabs" id="tabs" role="tablist"></div>
+<section class="panel" id="panel"></section>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const ls={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+
+function memory(el){
+  const P=[["🔨","Hammer"],["🪚","Saw"],["📏","Ruler"],["🖱️","Mouse"],["⌨️","Keyboard"],["🥄","Spoon"],["🌱","Seedling"],["🐟","Tilapia"]];
+  const deck=shuffle(P.flatMap((p,i)=>[{i,t:p[0],e:1},{i,t:p[1]}]));
+  let open=[],moves=0,found=0,lock=false;
+  const best=ls.get("best-mem");
+  el.innerHTML=`<h2>Memory Match</h2><p>Flip two cards to match each picture with its name.</p><div class="row"><b id="mv">Moves: 0</b><span>${best?"Best: "+best+" moves":"No best score yet"}</span><button class="btn alt" id="again">Restart</button></div><div class="cards" id="cd"></div><div class="msg" id="msg" aria-live="polite"></div>`;
+  $("again").onclick=()=>memory(el);
+  deck.forEach(c=>{
+    const b=document.createElement("button");b.className="card"+(c.e?" emo":"");b.textContent="?";b.setAttribute("aria-label","Face-down card");
+    b.onclick=()=>{
+      if(lock||b.classList.contains("up"))return;
+      b.classList.add("up");b.textContent=c.t;b.setAttribute("aria-label",c.e?"Picture: "+P[c.i][1]:c.t);open.push([b,c]);
+      if(open.length<2)return;
+      moves++;$("mv").textContent="Moves: "+moves;
+      const [[b1,c1],[b2,c2]]=open;
+      if(c1.i===c2.i){
+        b1.disabled=b2.disabled=true;b1.classList.add("done");b2.classList.add("done");open=[];
+        if(++found===P.length){
+          $("msg").className="msg g";$("msg").textContent="You matched them all in "+moves+" moves!";
+          if(!best||moves<best)ls.set("best-mem",moves);
+        }
+      }else{
+        lock=true;
+        setTimeout(()=>{[b1,b2].forEach(x=>{x.classList.remove("up");x.textContent="?";x.setAttribute("aria-label","Face-down card")});open=[];lock=false},900);
+      }
+    };
+    $("cd").append(b);
+  });
+}
+
+function scramble(el){
+  const W=[["KEYBOARD","Input device used for typing"],["COMPOST","Organic fertilizer from decayed matter"],["HAMMER","Its claw pulls out nails"],["SEEDLING","Young plant ready to transplant"],["PANDIWA","Salitang nagsasaad ng kilos"],["PANGNGALAN","Ngalan ng tao, hayop, bagay, o lugar"],["TILAPIA","Popular freshwater fish"],["PASSWORD","Secret code that protects your account"],["RECIPE","Instructions for cooking a dish"],["BAYANIHAN","Pagtutulungan ng komunidad"]];
+  const list=shuffle(W);let i=0,score=0;
+  const scr=w=>{let s;do{s=shuffle([...w]).join("")}while(s===w);return s};
+  const best=ls.get("best-scr");
+  const next=()=>{
+    if(i>=list.length){
+      if(!best||score>best)ls.set("best-scr",score);
+      el.innerHTML=`<h2>Word Scramble</h2><div class="big">${score} / ${list.length}</div><p>${score>=8?"Excellent vocabulary!":"Good effort. Play again to improve."}</p><button class="btn" id="re">Play again</button>`;
+      $("re").onclick=()=>scramble(el);return;
+    }
+    const [w,h]=list[i];
+    el.innerHTML=`<h2>Word Scramble</h2><p>Word ${i+1} of ${list.length}. Score: ${score}${best?" (best "+best+")":""}</p><div class="scr" aria-label="Scrambled letters">${scr(w)}</div><p><b>Hint:</b> ${h}</p>
+    <form id="f"><label for="a">Your answer</label><input id="a" autocomplete="off" autocapitalize="characters" required><div class="row"><button class="btn" type="submit">Check</button><button class="btn alt" type="button" id="skip">Skip</button></div></form><div class="msg" id="msg" aria-live="polite"></div>`;
+    $("a").focus();
+    $("skip").onclick=()=>{i++;next()};
+    $("f").onsubmit=e=>{
+      e.preventDefault();
+      if($("a").value.trim().toUpperCase()===w){score++;$("msg").className="msg g";$("msg").textContent="Correct!";setTimeout(()=>{i++;next()},700)}
+      else{$("msg").className="msg r";$("msg").textContent="Not quite. Try again or skip.";$("a").select()}
+    };
+  };
+  next();
+}
+
+const GAMES=[{n:"🧠 Memory Match",f:memory},{n:"🔤 Word Scramble",f:scramble}];
+GAMES.forEach((g,k)=>{
+  const b=document.createElement("button");b.className="tab";b.setAttribute("role","tab");b.textContent=g.n;
+  b.onclick=()=>{document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-selected",t===b));g.f($("panel"))};
+  $("tabs").append(b);
+  if(!k)b.click();
+});
+</script>
+</body>
+</html>
