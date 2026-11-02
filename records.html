@@ -5,18 +5,76 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Class Record Dashboard | Learning Hub</title>
 <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="shared.css">
+<style>
+:root{--bg:#eef3f1;--ink:#12302f;--card:#fff;--line:#c9d8d4;--ok:#15803d;--bad:#b91c1c;--head:#12302f;--headtxt:#f4f7f6;--acc:#0f766e;--onacc:#fff}
+@media (prefers-color-scheme:dark){:root{--bg:#0d1c1c;--ink:#e6efed;--card:#142a2a;--line:#2b4545;--ok:#4ade80;--bad:#f87171;--head:#071212;--acc:#2dd4bf;--onacc:#04201d}}
+*{box-sizing:border-box}
+body{margin:0;font-family:Lexend,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+.top{background:var(--head);color:var(--headtxt);position:sticky;top:0;z-index:5}
+.top .wrap{display:flex;align-items:center;gap:8px 22px;flex-wrap:wrap;padding-top:12px;padding-bottom:12px}
+.brand{font-weight:800;font-size:1.05rem;color:inherit;text-decoration:none;margin-right:auto}
+.top nav{display:flex;gap:4px;flex-wrap:wrap}
+.top nav a{color:inherit;text-decoration:none;font-weight:600;font-size:.9rem;padding:6px 12px;border-radius:6px;opacity:.8}
+.top nav a:hover{opacity:1}
+.top nav a[aria-current=page]{background:rgba(255,255,255,.16);opacity:1}
+main{padding-top:28px;padding-bottom:56px}
+h1{font-size:clamp(1.8rem,5vw,2.7rem);font-weight:800;letter-spacing:-.02em;line-height:1.15;margin:0 0 8px}
+.lead{max-width:56ch;opacity:.85;margin:0 0 26px}
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.hub{display:block;text-decoration:none;color:inherit;background:var(--card);border:1px solid var(--line);border-top:8px solid var(--c);border-radius:8px;padding:22px}
+.hub:hover{border-color:var(--c)}
+.hub .ic{font-size:2.2rem}
+.hub h2{margin:6px 0}
+.hub p{margin:0;opacity:.85;font-size:.95rem}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:0;padding:0;list-style:none}
+.chips li{border:1px solid var(--line);background:var(--card);border-radius:20px;padding:4px 14px;font-size:.88rem;font-weight:600}
+h3{margin:34px 0 12px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.tab{font:inherit;font-weight:600;padding:9px 16px;border-radius:6px;border:2px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+.tab[aria-selected=true]{background:var(--acc);border-color:var(--acc);color:var(--onacc)}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:24px}
+.panel h2{margin:0 0 4px}
+.panel>p{margin:0 0 12px;opacity:.85}
+.btn{font:inherit;font-weight:600;border:2px solid var(--acc);background:var(--acc);color:var(--onacc);padding:8px 18px;border-radius:6px;cursor:pointer}
+.btn.alt{background:transparent;color:var(--ink);border-color:var(--ink)}
+input,select,textarea{font:inherit;color:var(--ink);background:var(--bg);border:2px solid var(--line);border-radius:6px;padding:8px 10px;max-width:100%}
+textarea{width:100%;min-height:100px}
+label{display:block;font-weight:600;margin:12px 0 4px}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.big{font-size:2.6rem;font-weight:800;color:var(--acc);line-height:1.2}
+.row{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px;align-items:center}
+.cols{display:flex;gap:14px;flex-wrap:wrap}
+.cols>div{flex:1 1 140px}
+.cols input,.cols select{width:100%}
+.bits{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0}
+.bit{font:inherit;width:56px;border:2px solid var(--line);background:var(--bg);color:var(--ink);border-radius:6px;padding:6px 0;cursor:pointer;display:flex;flex-direction:column;align-items:center}
+.bit small{font-size:.75rem;opacity:.75}
+.bit b{font-size:1.5rem}
+.bit.on{background:var(--acc);border-color:var(--acc);color:var(--onacc)}
+.out{margin-top:16px;padding:14px;border-radius:6px;background:var(--bg);border:1px solid var(--line)}
+.out ul{margin:6px 0 0;padding-left:20px}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:480px;margin-top:14px}
+.card{aspect-ratio:1;font:inherit;font-weight:600;font-size:.82rem;border-radius:8px;border:2px solid var(--line);background:var(--acc);color:var(--onacc);cursor:pointer;display:grid;place-items:center;padding:2px}
+.card.up,.card.done{background:var(--bg);color:var(--ink)}
+.card.done{border-color:var(--ok)}
+.card.emo{font-size:1.9rem}
+.scr{font-size:clamp(1.6rem,6vw,2.4rem);font-weight:800;letter-spacing:.3em;margin:10px 0;word-break:break-all}
+.msg{min-height:1.6em;font-weight:600;margin-top:10px}
+.msg.g{color:var(--ok)}.msg.r{color:var(--bad)}
+footer{text-align:center;font-size:.8rem;opacity:.7;padding:0 20px 28px}
+</style>
 <style>
 :root{color-scheme:light;--bg:#f5f7fb;--ink:#1c2b4a;--card:#fff;--line:#dde4ef;--head:#e3ecf8;--headtxt:#1c2b4a;--acc:#3b6bb5;--onacc:#fff;--serif:Georgia,"Times New Roman",serif;--c0:#5b7db1;--c1:#a9bde0;--c2:#e6b87a;--c3:#d08555;--c4:#7bb394;--c5:#b59ad1}
 .top nav a[aria-current=page]{background:rgba(28,43,74,.1)}
 .band{background:var(--head);padding:26px 0 76px}
 .eyebrow{font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:#8a5a2b;font-weight:600}
-.eyebrow input{font:inherit;letter-spacing:inherit;text-transform:inherit;color:inherit;background:transparent;border:0;border-bottom:1px dashed #c9a57c;border-radius:0;padding:0 2px;width:12em}
+.eyebrow input{font:inherit;letter-spacing:inherit;text-transform:inherit;color:inherit;background:transparent;border:0;border-bottom:1px dashed #c9a57c;border-radius:0;padding:0 2px;width:16em}
 .band h1{font-family:var(--serif);font-weight:400;margin:6px 0 4px}
 .meta{opacity:.75;font-size:.92rem}
 main.wrap{padding-top:0;margin-top:-52px}
 .kpis{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
-.kpi,.card{background:var(--card);border:1px solid var(--line);border-radius:8px;box-shadow:0 1px 3px rgba(28,43,74,.06)}
+.kpi,.box{background:var(--card);border:1px solid var(--line);border-radius:8px;box-shadow:0 1px 3px rgba(28,43,74,.06)}
 .kpi{padding:16px 18px}
 .kpi.top1{background:#fdebd3;border-color:#ecc791}
 .kpi small{display:block;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;opacity:.75;font-weight:600}
@@ -24,8 +82,8 @@ main.wrap{padding-top:0;margin-top:-52px}
 .kpi span{font-size:.85rem;opacity:.8}
 .mid{display:grid;gap:16px;grid-template-columns:minmax(0,2fr) minmax(260px,1fr);margin:18px 0}
 @media(max-width:760px){.mid{grid-template-columns:1fr}}
-.card{padding:20px 22px}
-.card h2{font-family:var(--serif);font-weight:400;font-size:1.4rem;margin:0}
+.box{padding:20px 22px}
+.box h2{font-family:var(--serif);font-weight:400;font-size:1.4rem;margin:0}
 .sub{margin:2px 0 10px;font-size:.88rem;opacity:.75}
 .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.85rem;margin-bottom:6px}
 .legend i{display:inline-block;width:12px;height:12px;border-radius:2px;margin-right:6px;vertical-align:-1px}
@@ -73,10 +131,10 @@ tr.foot td{background:#f0e6d4;font-weight:700;border-bottom:0;padding:10px 6px}
 <main class="wrap">
 <div class="kpis" id="kpis"></div>
 <div class="mid">
-<section class="card"><h2>Scores by assessment</h2><p class="sub">Each student's score on every assessment, out of 100.</p><div class="legend" id="legend"></div><div class="chartbox" id="chart"></div></section>
-<section class="card"><h2>Ranking</h2><p class="sub">By average score.</p><div id="rank"></div></section>
+<section class="box"><h2>Scores by assessment</h2><p class="sub">Each student's score on every assessment, out of 100.</p><div class="legend" id="legend"></div><div class="chartbox" id="chart"></div></section>
+<section class="box"><h2>Ranking</h2><p class="sub">By average score.</p><div id="rank"></div></section>
 </div>
-<section class="card">
+<section class="box">
 <div class="tools">
 <button class="btn" id="addS">+ Add student</button><button class="btn alt" id="addA">+ Add assessment</button><button class="btn alt" id="csv">Download CSV</button><button class="btn alt" id="print">Print</button><button class="btn alt" id="reset">Reset sample</button>
 </div>
