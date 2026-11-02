@@ -6,5 +6,10 @@ Learning Hub - GitHub Pages package
 4. Your site will be at https://YOUR-USERNAME.github.io/REPO-NAME/
 
 All pages must be in the same folder so the navigation links work.
-Class Record: scores are saved in the browser of whoever edits them. Use "Download CSV" to keep a copy.
-To edit quiz questions, open quiz.html and find the BANK list near the top of the script.
+
+How quiz progress reaches the class record:
+- Students type their name, then take a quiz. The result is saved in that browser.
+- On the SAME device, Records > Quiz progress shows it automatically.
+- On OTHER devices, the student taps "Copy my progress code" after a quiz and sends it to you.
+  Paste the codes in Records > Import progress codes.
+- Use Download CSV to keep a permanent copy. Browser data can be cleared by the user.

@@ -44,6 +44,12 @@ main{padding:24px 20px 48px}
 .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
 .hidden{display:none}
 footer{text-align:center;font-size:.8rem;opacity:.7;padding:0 20px 28px}
+.who{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:14px 16px;margin-bottom:16px}
+.who label{display:block;font-weight:600;margin-bottom:6px}
+.who input{font:inherit;width:100%;max-width:380px;padding:8px 10px;border:2px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)}
+.whomsg{color:var(--bad);font-weight:600;margin-top:6px;min-height:1.2em}
+.saved{font-size:.9rem;opacity:.85}
+.codemsg{font-size:.8rem;word-break:break-all;margin-top:10px}
 @media (prefers-reduced-motion:reduce){.fill{transition:none}}
 </style>
 </head>
@@ -54,7 +60,7 @@ footer{text-align:center;font-size:.8rem;opacity:.7;padding:0 20px 28px}
 <p>Pumili ng asignatura at subukan ang iyong kaalaman. Choose a subject and test what you know.</p>
 </div></header>
 <main><div class="wrap">
-<section id="home"><div class="grid" id="grid"></div></section>
+<section id="home"><div class="who"><label for="who">Your name (so your score goes to the class record)</label><input id="who" autocomplete="name" maxlength="60" placeholder="Type your full name"><div id="whomsg" class="whomsg" aria-live="polite"></div></div><div class="grid" id="grid"></div></section>
 <section id="quiz" class="hidden">
 <div class="bar"><button class="btn" id="back">Back to subjects</button><span id="count"></span></div>
 <div class="track"><div class="fill" id="fill"></div></div>
@@ -65,8 +71,8 @@ footer{text-align:center;font-size:.8rem;opacity:.7;padding:0 20px 28px}
 <section id="result" class="hidden">
 <h2 id="rtitle"></h2>
 <div class="score" id="rscore"></div>
-<p id="rmsg"></p>
-<div class="row"><button class="btn main" id="retry">Try again</button><button class="btn" id="home2">Choose another subject</button></div>
+<p id="rmsg"></p><p id="saved" class="saved"></p>
+<div class="row"><button class="btn main" id="retry">Try again</button><button class="btn" id="home2">Choose another subject</button><button class="btn" id="code">Copy my progress code</button></div><p id="codemsg" class="codemsg"></p>
 </section>
 </div></main>
 <footer>To add questions, edit the BANK list near the top of the script in index.html.</footer>
@@ -134,7 +140,7 @@ const BANK = [
 const $=id=>document.getElementById(id);
 const store={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
-let cur,list,idx,score,locked;
+let cur,list,idx,score,locked,missed=[];
 
 function show(id){["home","quiz","result"].forEach(s=>$(s).classList.toggle("hidden",s!==id));window.scrollTo(0,0)}
 
@@ -152,7 +158,10 @@ function renderHome(){
 }
 
 function start(s){
-  cur=s;list=shuffle(s.q);idx=0;score=0;
+  const nm=$("who").value.trim();
+  if(!nm){$("whomsg").textContent="Please type your name first so your score is saved.";$("who").focus();show("home");return}
+  $("whomsg").textContent="";
+  cur=s;list=shuffle(s.q);idx=0;score=0;missed=[];
   document.querySelectorAll("#quiz,#result").forEach(e=>e.style.setProperty("--c",s.color));
   show("quiz");ask();
 }
@@ -176,7 +185,7 @@ function pick(btn,ok){
   if(locked)return;locked=true;
   const q=list[idx];
   document.querySelectorAll(".opt").forEach(o=>{o.disabled=true;if(o.textContent===q[1])o.classList.add("right")});
-  if(ok)score++;else btn.classList.add("wrong");
+  if(ok)score++;else{btn.classList.add("wrong");missed.push(q[0])}
   const last=idx===list.length-1;
   const f=cur.fil;
   $("fb").innerHTML=`<div class="fb"><strong class="${ok?"g":"r"}">${ok?(f?"Tama!":"Correct!"):(f?"Mali.":"Not quite.")}</strong> ${q[5]}<div class="row"><button class="btn main" id="next">${last?(f?"Tingnan ang resulta":"See results"):(f?"Susunod":"Next")}</button></div></div>`;
@@ -188,6 +197,9 @@ function finish(){
   const total=list.length,f=cur.fil;
   const prev=store.get("best-"+cur.id);
   if(prev===null||score>prev)store.set("best-"+cur.id,score);
+  logResult();
+  $("saved").textContent=(f?"Naitala ang iskor ni ":"Score saved for ")+lname()+(f?" sa talaan ng klase sa device na ito. Ipadala ang progress code sa guro kung ibang device ang gamit niya.":" in the class record on this device. If your teacher uses another device, send them your progress code.");
+  $("codemsg").textContent="";
   $("fill").style.width="100%";
   $("rtitle").textContent=cur.name;
   $("rscore").textContent=score+" / "+total;
@@ -199,6 +211,23 @@ function finish(){
 $("back").onclick=renderHome;
 $("home2").onclick=renderHome;
 $("retry").onclick=()=>start(cur);
+const lname=()=>$("who").value.trim();
+function logResult(){
+  const log=store.get("quiz-log")||[];
+  log.push({n:lname(),s:cur.id,sn:cur.name,sc:score,t:list.length,d:Date.now(),m:missed});
+  store.set("quiz-log",log.slice(-1000));
+}
+function progressCode(){
+  const me=lname().toLowerCase(),mine=(store.get("quiz-log")||[]).filter(e=>e.n.toLowerCase()===me);
+  return "LH1:"+btoa(unescape(encodeURIComponent(JSON.stringify(mine))));
+}
+$("code").onclick=async()=>{
+  const c=progressCode();let ok=false;
+  try{await navigator.clipboard.writeText(c);ok=true}catch(e){}
+  $("codemsg").textContent=ok?"Copied! Send this code to your teacher.":"Copy this code and send it to your teacher: "+c;
+};
+$("who").value=store.get("student-name")||"";
+$("who").oninput=()=>{store.set("student-name",$("who").value);$("whomsg").textContent=""};
 renderHome();
 </script>
 </body>
