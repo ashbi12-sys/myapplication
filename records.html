@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Class Record Dashboard | Learning Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+:root{color-scheme:light;--bg:#f5f7fb;--ink:#1c2b4a;--card:#fff;--line:#dde4ef;--head:#e3ecf8;--headtxt:#1c2b4a;--acc:#3b6bb5;--onacc:#fff;--serif:Georgia,"Times New Roman",serif;--c0:#5b7db1;--c1:#a9bde0;--c2:#e6b87a;--c3:#d08555;--c4:#7bb394;--c5:#b59ad1}
+.top nav a[aria-current=page]{background:rgba(28,43,74,.1)}
+.band{background:var(--head);padding:26px 0 76px}
+.eyebrow{font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:#8a5a2b;font-weight:600}
+.eyebrow input{font:inherit;letter-spacing:inherit;text-transform:inherit;color:inherit;background:transparent;border:0;border-bottom:1px dashed #c9a57c;border-radius:0;padding:0 2px;width:12em}
+.band h1{font-family:var(--serif);font-weight:400;margin:6px 0 4px}
+.meta{opacity:.75;font-size:.92rem}
+main.wrap{padding-top:0;margin-top:-52px}
+.kpis{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.kpi,.card{background:var(--card);border:1px solid var(--line);border-radius:8px;box-shadow:0 1px 3px rgba(28,43,74,.06)}
+.kpi{padding:16px 18px}
+.kpi.top1{background:#fdebd3;border-color:#ecc791}
+.kpi small{display:block;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;opacity:.75;font-weight:600}
+.kpi b{display:block;font-family:var(--serif);font-weight:400;font-size:2rem;line-height:1.25;overflow-wrap:anywhere}
+.kpi span{font-size:.85rem;opacity:.8}
+.mid{display:grid;gap:16px;grid-template-columns:minmax(0,2fr) minmax(260px,1fr);margin:18px 0}
+@media(max-width:760px){.mid{grid-template-columns:1fr}}
+.card{padding:20px 22px}
+.card h2{font-family:var(--serif);font-weight:400;font-size:1.4rem;margin:0}
+.sub{margin:2px 0 10px;font-size:.88rem;opacity:.75}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.85rem;margin-bottom:6px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.chartbox{overflow-x:auto}
+.chartbox svg text{fill:var(--ink);font-family:Lexend,sans-serif}
+.rk{margin-top:14px}
+.rk .h{display:flex;justify-content:space-between;font-family:var(--serif);font-size:1.15rem}
+.rk .h b{font-family:Lexend,sans-serif;font-size:1.05rem}
+.trk{height:10px;border-radius:5px;background:#e8edf5;margin:6px 0}
+.trk div{height:100%;border-radius:5px;background:var(--acc)}
+.pill{display:inline-block;font-size:.78rem;padding:2px 12px;border-radius:20px;border:1px solid transparent;font-weight:600}
+.p-out{background:#dbe7fb;color:#1c3a74;border-color:#b5cbf2}
+.p-pro{background:#fde9cf;color:#7a3f12;border-color:#ecc791}
+.p-dev{background:#ece8df;color:#51493a;border-color:#d8d1c2}
+.tools{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:640px}
+th{font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;opacity:.85;padding:8px 6px;border-bottom:2px solid var(--ink);text-align:right;white-space:nowrap}
+td{padding:4px 6px;border-bottom:1px solid var(--line);text-align:right}
+th.l,td.l{text-align:left}
+td input,th input{border:1px solid transparent;background:transparent;border-radius:4px;padding:4px 6px;text-align:right;width:70px}
+td input:hover,th input:hover{border-color:var(--line)}
+th input.nm{width:90px;text-transform:uppercase;letter-spacing:.08em;font-size:.74rem;font-weight:600}
+td input.l{text-align:left;width:100%;min-width:110px;font-family:var(--serif);font-size:1.05rem}
+input.hi{font-weight:700;color:#1c3a74}
+input.lo{font-weight:700;color:#a4531c}
+.x{font:inherit;border:0;background:transparent;color:var(--ink);opacity:.45;cursor:pointer;font-size:1.1rem}
+.x:hover{opacity:1}
+tr.foot td{background:#f0e6d4;font-weight:700;border-bottom:0;padding:10px 6px}
+.note{font-size:.8rem;opacity:.75;margin:10px 0 0}
+.empty{opacity:.7;padding:20px 0}
+@media print{.top,.tools,.x{display:none}.band{padding-bottom:70px}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+<a class="brand" href="index.html">Learning Hub</a>
+<nav aria-label="Main"><a href="index.html">Home</a><a href="quiz.html">Quizzes</a><a href="labs.html">Labs</a><a href="games.html">Games</a><a href="records.html" aria-current="page">Records</a></nav>
+</div></header>
+<div class="band"><div class="wrap">
+<div class="eyebrow">Class record &middot; <input id="sec" aria-label="Section or subject" placeholder="Section / Subject"></div>
+<h1>Student Grade Dashboard</h1>
+<div class="meta" id="meta"></div>
+</div></div>
+<main class="wrap">
+<div class="kpis" id="kpis"></div>
+<div class="mid">
+<section class="card"><h2>Scores by assessment</h2><p class="sub">Each student's score on every assessment, out of 100.</p><div class="legend" id="legend"></div><div class="chartbox" id="chart"></div></section>
+<section class="card"><h2>Ranking</h2><p class="sub">By average score.</p><div id="rank"></div></section>
+</div>
+<section class="card">
+<div class="tools">
+<button class="btn" id="addS">+ Add student</button><button class="btn alt" id="addA">+ Add assessment</button><button class="btn alt" id="csv">Download CSV</button><button class="btn alt" id="print">Print</button><button class="btn alt" id="reset">Reset sample</button>
+</div>
+<div class="tablewrap"><table id="tbl"></table></div>
+<p class="note">Click any name or score to edit. Blue bold = highest in column, brown bold = lowest. Total is the sum of all scores. Standing: 90+ Outstanding, 80+ Proficient, below 80 Developing. Data is saved in this browser only.</p>
+</section>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmt=n=>String(+n.toFixed(2));
+const SAMPLE=()=>({sec:"",assess:["Quiz 1","Quiz 2","Project","Exam"],students:[{name:"Ana",scores:[85,90,88,92]},{name:"Ben",scores:[70,75,80,79]},{name:"Carla",scores:[95,92,94,96]}]});
+let data;
+try{data=JSON.parse(localStorage.getItem("class-record-v1"))}catch(e){}
+if(!data||!data.assess||!data.students)data=SAMPLE();
+const save=()=>{try{localStorage.setItem("class-record-v1",JSON.stringify(data))}catch(e){}};
+const col=j=>"var(--c"+(j%6)+")";
+const stand=a=>a>=90?["Outstanding","p-out"]:a>=80?["Proficient","p-pro"]:["Developing","p-dev"];
+
+function stats(){
+  const A=data.assess,S=data.students;
+  const rows=S.map(s=>{const t=s.scores.reduce((a,b)=>a+b,0);return{s,t,a:A.length?t/A.length:0}});
+  const means=A.map((_,j)=>S.length?S.reduce((a,s)=>a+s.scores[j],0)/S.length:0);
+  return{rows,means};
+}
+
+function buildTable(){
+  const A=data.assess,S=data.students;
+  $("tbl").innerHTML=`<thead><tr><th class="l">Student</th>${A.map((a,j)=>`<th><input class="nm" data-a="${j}" value="${esc(a)}" aria-label="Assessment name"><button class="x" data-ra="${j}" aria-label="Remove assessment">&times;</button></th>`).join("")}<th>Total</th><th>Average</th><th>Standing</th><th></th></tr></thead><tbody>${S.map((s,i)=>`<tr><td class="l"><input class="l" data-s="${i}" value="${esc(s.name)}" aria-label="Student name"></td>${s.scores.map((v,j)=>`<td><input class="sc" type="number" min="0" max="100" data-i="${i}" data-j="${j}" value="${v}" aria-label="${esc(s.name)} ${esc(A[j])}"></td>`).join("")}<td class="tot"></td><td class="avg"></td><td><span class="pill"></span></td><td><button class="x" data-rs="${i}" aria-label="Remove student">&times;</button></td></tr>`).join("")}<tr class="foot"><td class="l">Class average</td>${A.map(()=>`<td class="cm"></td>`).join("")}<td id="ft"></td><td id="fa"></td><td></td><td></td></tr></tbody>`;
+}
+
+function update(){
+  const A=data.assess,S=data.students,{rows,means}=stats();
+  $("sec").value=data.sec||"";
+  $("meta").textContent=`${S.length} student${S.length===1?"":"s"} · ${A.length} assessment${A.length===1?"":"s"} · 100 pts each`;
+  const trs=$("tbl").querySelectorAll("tbody tr:not(.foot)");
+  rows.forEach((r,i)=>{
+    trs[i].querySelector(".tot").textContent=r.t;trs[i].querySelector(".avg").textContent=fmt(r.a);
+    const st=stand(r.a),p=trs[i].querySelector(".pill");p.textContent=st[0];p.className="pill "+st[1];
+  });
+  $("tbl").querySelectorAll(".cm").forEach((c,j)=>c.textContent=fmt(means[j]));
+  const cavg=rows.length?rows.reduce((a,r)=>a+r.a,0)/rows.length:0;
+  $("ft").textContent=rows.length?fmt(rows.reduce((a,r)=>a+r.t,0)/rows.length):"";$("fa").textContent=rows.length?fmt(cavg):"";
+  A.forEach((_,j)=>{
+    const vals=S.map(s=>s.scores[j]),mx=Math.max(...vals),mn=Math.min(...vals);
+    $("tbl").querySelectorAll(`.sc[data-j="${j}"]`).forEach(inp=>{const v=S[inp.dataset.i].scores[j];inp.classList.toggle("hi",S.length>1&&mx!==mn&&v===mx);inp.classList.toggle("lo",S.length>1&&mx!==mn&&v===mn)});
+  });
+  const sorted=rows.slice().sort((a,b)=>b.a-a.a),top=sorted[0];
+  const hiM=means.indexOf(Math.max(...means)),loM=means.indexOf(Math.min(...means));
+  $("kpis").innerHTML=S.length&&A.length?`<div class="kpi top1"><small>Top student</small><b>${esc(top.s.name)}</b><span>${fmt(top.a)} average · ${top.t} total</span></div><div class="kpi"><small>Class average</small><b>${fmt(cavg)}</b><span>across all ${A.length} assessments</span></div><div class="kpi"><small>Strongest assessment</small><b>${esc(A[hiM])}</b><span>class mean ${fmt(means[hiM])}</span></div><div class="kpi"><small>Needs attention</small><b>${esc(A[loM])}</b><span>class mean ${fmt(means[loM])}</span></div>`:`<div class="kpi"><b>No data yet</b><span>Add a student and an assessment to begin.</span></div>`;
+  $("legend").innerHTML=A.map((a,j)=>`<span><i style="background:${col(j)}"></i>${esc(a)}</span>`).join("");
+  $("rank").innerHTML=sorted.length?sorted.map((r,k)=>{const st=stand(r.a);return`<div class="rk"><div class="h"><span>${k+1}. ${esc(r.s.name)}</span><b>${fmt(r.a)}</b></div><div class="trk"><div style="width:${Math.min(100,r.a)}%"></div></div><span class="pill ${st[1]}">${st[0]}</span></div>`}).join(""):`<p class="empty">No students yet.</p>`;
+  chart();save();
+}
+
+function chart(){
+  const A=data.assess,S=data.students;
+  if(!S.length||!A.length){$("chart").innerHTML=`<p class="empty">Add students and assessments to see the chart.</p>`;return}
+  const bw=22,g=4,grp=A.length*(bw+g)+44,L=38,T=22,B=30,H=300,ph=H-T-B,W=Math.max(560,L+grp*S.length+10);
+  const y=v=>T+ph*(1-v/100);
+  let s=`<svg viewBox="0 0 ${W} ${H}" style="min-width:${Math.min(W,560)}px;width:100%;height:auto" role="img" aria-label="Grouped bar chart of scores by student and assessment">`;
+  [0,25,50,75,100].forEach(v=>{s+=`<line x1="${L}" x2="${W-6}" y1="${y(v)}" y2="${y(v)}" stroke="#dde4ef"/><text x="${L-8}" y="${y(v)+4}" font-size="10" text-anchor="end" opacity=".7">${v}</text>`});
+  S.forEach((st,i)=>{
+    const x0=L+i*grp+22;
+    st.scores.forEach((v,j)=>{const x=x0+j*(bw+g);s+=`<rect x="${x}" y="${y(v)}" width="${bw}" height="${ph*v/100}" fill="${col(j)}" rx="2"/><text x="${x+bw/2}" y="${y(v)-4}" font-size="10" font-weight="700" text-anchor="middle">${v}</text>`});
+    s+=`<text x="${x0+(A.length*(bw+g)-g)/2}" y="${H-8}" font-size="12" text-anchor="middle">${esc(st.name)}</text>`;
+  });
+  $("chart").innerHTML=s+`<line x1="${L}" x2="${W-6}" y1="${y(0)}" y2="${y(0)}" stroke="#1c2b4a"/></svg>`;
+}
+
+$("tbl").addEventListener("input",e=>{
+  const t=e.target,d=t.dataset;
+  if(t.classList.contains("sc")){const v=t.value===""?0:Math.max(0,Math.min(100,parseFloat(t.value)||0));data.students[d.i].scores[d.j]=v}
+  else if(d.s!==undefined)data.students[d.s].name=t.value;
+  else if(d.a!==undefined)data.assess[d.a]=t.value;
+  update();
+});
+$("tbl").addEventListener("click",e=>{
+  const d=e.target.dataset;
+  if(d.rs!==undefined)data.students.splice(d.rs,1);
+  else if(d.ra!==undefined){data.assess.splice(d.ra,1);data.students.forEach(s=>s.scores.splice(d.ra,1))}
+  else return;
+  buildTable();update();
+});
+$("sec").oninput=e=>{data.sec=e.target.value;save()};
+$("addS").onclick=()=>{data.students.push({name:"New student",scores:data.assess.map(()=>0)});buildTable();update();const n=$("tbl").querySelectorAll("input.l");n[n.length-1].select()};
+$("addA").onclick=()=>{data.assess.push("Assessment "+(data.assess.length+1));data.students.forEach(s=>s.scores.push(0));buildTable();update()};
+$("reset").onclick=()=>{if(confirm("Replace all data with the sample class?")){data=SAMPLE();buildTable();update()}};
+$("print").onclick=()=>window.print();
+$("csv").onclick=()=>{
+  const q=v=>'"'+String(v).replace(/"/g,'""')+'"',{rows}=stats();
+  const lines=[["Student",...data.assess,"Total","Average","Standing"].map(q).join(",")].concat(rows.map(r=>[r.s.name,...r.s.scores,r.t,fmt(r.a),stand(r.a)[0]].map(q).join(",")));
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+lines.join("\n")],{type:"text/csv"}));a.download="class-record.csv";a.click();
+};
+buildTable();update();
+</script>
+</body>
+</html>
