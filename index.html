@@ -1,29 +1,186 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>My Online Shop</title><link rel="stylesheet" href="style.css"></head>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TLE at Filipino Quiz Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eef3f1;--ink:#12302f;--card:#fff;--line:#c9d8d4;--ok:#15803d;--bad:#b91c1c;--head:#12302f;--headtxt:#f4f7f6}
+@media (prefers-color-scheme:dark){:root{--bg:#0d1c1c;--ink:#e6efed;--card:#142a2a;--line:#2b4545;--ok:#4ade80;--bad:#f87171;--head:#071212;--headtxt:#e6efed}}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:Lexend,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;min-height:100vh}
+header{background:var(--head);color:var(--headtxt);padding:28px 20px 24px}
+.wrap{max-width:860px;margin:0 auto}
+h1{font-size:clamp(1.6rem,5vw,2.4rem);font-weight:800;margin:0 0 6px;letter-spacing:-.02em}
+header p{margin:0;opacity:.85;max-width:52ch}
+main{padding:24px 20px 48px}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.subj{background:var(--card);border:1px solid var(--line);border-left:10px solid var(--c);border-radius:6px;padding:16px 18px;text-align:left;font:inherit;color:inherit;cursor:pointer}
+.subj:hover,.subj:focus-visible{outline:3px solid var(--c);outline-offset:2px}
+.subj b{display:block;font-size:1.15rem}
+.subj span{font-size:.9rem;opacity:.8}
+.best{margin-top:10px;font-size:.85rem;font-weight:600;color:var(--c)}
+@media (prefers-color-scheme:dark){.best{filter:brightness(1.5)}}
+.bar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.btn{font:inherit;font-weight:600;border:2px solid var(--ink);background:transparent;color:var(--ink);padding:8px 16px;border-radius:6px;cursor:pointer}
+.btn.main{background:var(--c);border-color:var(--c);color:#fff}
+.btn:focus-visible{outline:3px solid var(--c);outline-offset:2px}
+.track{height:8px;background:var(--line);border-radius:4px;overflow:hidden;margin-bottom:20px}
+.fill{height:100%;background:var(--c);width:0;transition:width .3s}
+.q{font-size:1.25rem;font-weight:600;margin:0 0 16px}
+.opts{display:grid;gap:10px}
+.opt{font:inherit;text-align:left;background:var(--card);color:var(--ink);border:2px solid var(--line);border-radius:6px;padding:12px 14px;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--c)}
+.opt:focus-visible{outline:3px solid var(--c);outline-offset:2px}
+.opt.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 16%,var(--card))}
+.opt.wrong{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 14%,var(--card))}
+.opt:disabled{cursor:default}
+.fb{margin-top:16px;padding:12px 14px;border-radius:6px;background:var(--card);border:1px solid var(--line)}
+.fb strong.g{color:var(--ok)}.fb strong.r{color:var(--bad)}
+.score{font-size:3rem;font-weight:800;color:var(--c);margin:8px 0}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.hidden{display:none}
+footer{text-align:center;font-size:.8rem;opacity:.7;padding:0 20px 28px}
+@media (prefers-reduced-motion:reduce){.fill{transition:none}}
+</style>
+</head>
 <body>
-<header><h1 id="name">My Online Shop</h1><p class="sub" id="tag"></p></header>
-<main><div id="list" class="grid"><p class="msg">Loading…</p></div></main>
+<header><div class="wrap">
+<h1>TLE at Filipino Quiz Hub</h1>
+<p>Pumili ng asignatura at subukan ang iyong kaalaman. Choose a subject and test what you know.</p>
+</div></header>
+<main><div class="wrap">
+<section id="home"><div class="grid" id="grid"></div></section>
+<section id="quiz" class="hidden">
+<div class="bar"><button class="btn" id="back">Back to subjects</button><span id="count"></span></div>
+<div class="track"><div class="fill" id="fill"></div></div>
+<h2 class="q" id="qtext"></h2>
+<div class="opts" id="opts"></div>
+<div id="fb"></div>
+</section>
+<section id="result" class="hidden">
+<h2 id="rtitle"></h2>
+<div class="score" id="rscore"></div>
+<p id="rmsg"></p>
+<div class="row"><button class="btn main" id="retry">Try again</button><button class="btn" id="home2">Choose another subject</button></div>
+</section>
+</div></main>
+<footer>To add questions, edit the BANK list near the top of the script in index.html.</footer>
+
 <script>
-const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-fetch("items.json?v="+Date.now()).then(r=>r.json()).then(d=>{
-  const s=d.shop||{},c=s.contact||"";
-  document.getElementById("name").textContent=document.title=s.name||"My Online Shop";
-  document.getElementById("tag").textContent=s.tagline||"";
-  const items=[...(d.items||[])].sort((a,b)=>b.createdAt-a.createdAt);
-  document.getElementById("list").innerHTML=items.length?items.map(it=>{
-    const p=it.photos||[];let buy="";
-    if(!it.sold&&c){buy=/^https?:\/\//.test(c)?`<a class="btn primary" href="${esc(c)}" target="_blank" rel="noopener">Contact seller</a>`
-      :c.includes("@")&&!c.includes(" ")?`<a class="btn primary" href="mailto:${esc(c)}?subject=${encodeURIComponent("Interested in: "+it.title)}">Message seller</a>`
-      :`<span class="note">Contact: ${esc(c)}</span>`}
-    return `<article class="card ${it.sold?"sold":""}">
-      ${p.length?`<img class="hero" src="${esc(p[0])}" alt="${esc(it.title)}">`:'<div class="noimg">No photo</div>'}
-      ${p.length>1?`<div class="thumbs">${p.map((x,i)=>`<img src="${esc(x)}" class="${i?"":"on"}" alt="">`).join("")}</div>`:""}
-      <div class="body"><h3 class="title">${esc(it.title)}${it.sold?'<span class="badge">SOLD</span>':""}</h3>
-      <div class="price">${esc(it.price)}</div><p class="desc">${esc(it.desc)}</p><div class="row">${buy}</div></div></article>`}).join("")
-    :'<p class="msg">Nothing for sale right now. Check back soon!</p>';
-}).catch(()=>document.getElementById("list").innerHTML='<p class="msg">Could not load items.</p>');
-document.addEventListener("click",e=>{const t=e.target.closest(".thumbs img");if(!t)return;
-  const c=t.closest(".card");c.querySelector(".hero").src=t.src;c.querySelectorAll(".thumbs img").forEach(i=>i.classList.toggle("on",i===t))});
-</script></body></html>
+// ===== EDIT HERE: add subjects and questions =====
+// Each question: [question, correct answer, wrong1, wrong2, wrong3, explanation]
+const BANK = [
+ {id:"ict",name:"ICT",desc:"Computers, internet safety, and productivity tools",color:"#1d4ed8",fil:false,q:[
+  ["Which of these is an input device?","Keyboard","Monitor","Speaker","Printer","A keyboard sends data into the computer. Monitors, speakers, and printers show or produce output."],
+  ["What does CPU stand for?","Central Processing Unit","Computer Personal Unit","Central Program Utility","Core Power Unit","The CPU is the brain of the computer that processes instructions."],
+  ["Which password is the strongest?","Tr33!Mango#2026","password123","12345678","myname","Long passwords mixing letters, numbers, and symbols are hardest to guess."],
+  ["What is the shortcut to copy selected text?","Ctrl + C","Ctrl + V","Ctrl + X","Ctrl + Z","Ctrl+V pastes, Ctrl+X cuts, and Ctrl+Z undoes."],
+  ["Phishing is when someone...","Sends fake messages to steal your personal information","Cleans your computer of viruses","Speeds up your internet","Backs up your files","Never click suspicious links or share passwords."],
+  ["Which file extension is a Word document?",".docx",".xlsx",".pptx",".mp4","Word uses .docx, Excel uses .xlsx, and PowerPoint uses .pptx."]]},
+ {id:"he",name:"Home Economics",desc:"Food, sewing, and family and home skills",color:"#be185d",fil:false,q:[
+  ["How long should you wash your hands with soap?","At least 20 seconds","2 seconds","5 seconds","Until the soap is gone","20 seconds removes most germs."],
+  ["1 tablespoon equals how many teaspoons?","3","2","5","10","3 teaspoons = 1 tablespoon."],
+  ["Which is a basic hand stitch?","Running stitch","Zipper stitch","Button stitch","Drill stitch","The running stitch is the simplest: in and out in a straight line."],
+  ["How do you prevent cross-contamination in the kitchen?","Use separate cutting boards for raw meat and vegetables","Wash only the knife","Cook everything longer","Store raw meat above cooked food","Raw meat germs can spread to ready-to-eat food."],
+  ["Which tool is used to take body measurements for sewing?","Tape measure","Steel ruler","Try square","Caliper","A flexible tape measure follows body curves."],
+  ["Rice, bread, and root crops belong to which food group?","Go foods (energy-giving)","Grow foods","Glow foods","Water foods","Go foods give the body energy."]]},
+ {id:"ia",name:"Industrial Arts",desc:"Hand tools, measuring, and workshop safety",color:"#b45309",fil:false,q:[
+  ["Which protective gear shields your eyes?","Safety goggles","Gloves","Apron","Boots","Always wear goggles when cutting, drilling, or grinding."],
+  ["Which tool checks if a surface is level?","Spirit level","Try square","Plumb bob","Vise","The bubble sits in the center when the surface is level."],
+  ["What is the claw of a hammer used for?","Pulling out nails","Cutting wood","Measuring","Drilling holes","The curved claw gives leverage to remove nails."],
+  ["1 meter equals how many centimeters?","100","10","1000","50","Metric: 1 m = 100 cm = 1,000 mm."],
+  ["Which tool is used to cut wood by hand?","Handsaw","Pliers","Screwdriver","Chisel only","A handsaw has teeth designed to cut through wood."],
+  ["What is the best habit before cutting material?","Measure twice, cut once","Cut first, measure later","Guess the size","Measure once only","Careful measuring prevents wasted material."]]},
+ {id:"afa",name:"Agri-Fishery Arts",desc:"Crops, soil, aquaculture, and farming practices",color:"#15803d",fil:false,q:[
+  ["What do plants need for photosynthesis?","Sunlight, water, and carbon dioxide","Only soil","Only fertilizer","Darkness and oxygen","Leaves use light, water, and CO2 to make food."],
+  ["Which of these is an organic fertilizer?","Compost","Urea","Ammonium sulfate","Complete fertilizer 14-14-14","Compost comes from decomposed plant and animal matter."],
+  ["Which animals are used in vermicomposting?","Earthworms","Ants","Crickets","Snails","Worms break down waste into rich fertilizer."],
+  ["Tilapia is commonly raised in...","Freshwater fishponds","Deep sea only","Rice fields only","Dry land","Tilapia is a popular freshwater aquaculture fish."],
+  ["Why do we prepare soil before planting?","To loosen it and make it ready for roots","To make it dry","To remove all nutrients","To make it harder","Tillage loosens soil so roots can grow and air can enter."],
+  ["Seedlings are first grown in a...","Seedbed or seedling tray","Cooking pot","Fishpond","Compost pile","Later they are transplanted to the field."]]},
+ {id:"fil",name:"Filipino",desc:"Bahagi ng pananalita, kasingkahulugan, at panitikan",color:"#6d28d9",fil:true,q:[
+  ["Alin ang pangngalan?","aso","tumakbo","maganda","mabilis","Ang pangngalan ay ngalan ng tao, hayop, bagay, lugar, o pangyayari."],
+  ["Alin ang pandiwa?","kumain","bahay","pula","kahapon","Ang pandiwa ay salitang nagsasaad ng kilos."],
+  ["Kasingkahulugan ng \"masaya\":","natutuwa","malungkot","galit","pagod","Magkapareho ang kahulugan ng masaya at natutuwa."],
+  ["Kasalungat ng \"mataas\":","mababa","malaki","matangkad","mabigat","Ang kasalungat ay salitang may kabaligtarang kahulugan."],
+  ["Anong bantas ang ginagamit sa dulo ng patanong na pangungusap?","Tandang pananong (?)","Tuldok (.)","Kuwit (,)","Tandang padamdam (!)","Ginagamit ang tandang pananong sa mga tanong."],
+  ["Sino ang sumulat ng Noli Me Tangere?","Jose Rizal","Andres Bonifacio","Francisco Balagtas","Emilio Aguinaldo","Isinulat ito ni Dr. Jose Rizal noong 1887."]]}
+];
+// ===== END EDIT AREA =====
+
+const $=id=>document.getElementById(id);
+const store={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+let cur,list,idx,score,locked;
+
+function show(id){["home","quiz","result"].forEach(s=>$(s).classList.toggle("hidden",s!==id));window.scrollTo(0,0)}
+
+function renderHome(){
+  $("grid").innerHTML="";
+  BANK.forEach(s=>{
+    const b=store.get("best-"+s.id);
+    const el=document.createElement("button");
+    el.className="subj";el.style.setProperty("--c",s.color);
+    el.innerHTML=`<b>${s.name}</b><span>${s.desc}</span><div class="best">${b!==null&&b!==undefined?"Best: "+b+" / "+s.q.length:(s.fil?"Hindi pa nasusubukan":"Not tried yet")}</div>`;
+    el.onclick=()=>start(s);
+    $("grid").appendChild(el);
+  });
+  show("home");
+}
+
+function start(s){
+  cur=s;list=shuffle(s.q);idx=0;score=0;
+  document.querySelectorAll("#quiz,#result").forEach(e=>e.style.setProperty("--c",s.color));
+  show("quiz");ask();
+}
+
+function ask(){
+  locked=false;$("fb").innerHTML="";
+  const q=list[idx];
+  $("count").textContent=(cur.fil?"Tanong ":"Question ")+(idx+1)+" / "+list.length;
+  $("fill").style.width=(idx/list.length*100)+"%";
+  $("qtext").textContent=q[0];
+  $("opts").innerHTML="";
+  shuffle(q.slice(1,5)).forEach(t=>{
+    const b=document.createElement("button");
+    b.className="opt";b.textContent=t;
+    b.onclick=()=>pick(b,t===q[1]);
+    $("opts").appendChild(b);
+  });
+}
+
+function pick(btn,ok){
+  if(locked)return;locked=true;
+  const q=list[idx];
+  document.querySelectorAll(".opt").forEach(o=>{o.disabled=true;if(o.textContent===q[1])o.classList.add("right")});
+  if(ok)score++;else btn.classList.add("wrong");
+  const last=idx===list.length-1;
+  const f=cur.fil;
+  $("fb").innerHTML=`<div class="fb"><strong class="${ok?"g":"r"}">${ok?(f?"Tama!":"Correct!"):(f?"Mali.":"Not quite.")}</strong> ${q[5]}<div class="row"><button class="btn main" id="next">${last?(f?"Tingnan ang resulta":"See results"):(f?"Susunod":"Next")}</button></div></div>`;
+  $("next").focus();
+  $("next").onclick=()=>{idx++;idx<list.length?ask():finish()};
+}
+
+function finish(){
+  const total=list.length,f=cur.fil;
+  const prev=store.get("best-"+cur.id);
+  if(prev===null||score>prev)store.set("best-"+cur.id,score);
+  $("fill").style.width="100%";
+  $("rtitle").textContent=cur.name;
+  $("rscore").textContent=score+" / "+total;
+  const r=score/total;
+  $("rmsg").textContent=f?(r===1?"Perpekto! Napakagaling!":r>=.6?"Magaling! Kaunting review pa.":"Subukan muli. Kaya mo ito!"):(r===1?"Perfect score! Great work!":r>=.6?"Nice job! A little more review and you'll ace it.":"Keep practicing. Try again, you can do it!");
+  show("result");
+}
+
+$("back").onclick=renderHome;
+$("home2").onclick=renderHome;
+$("retry").onclick=()=>start(cur);
+renderHome();
+</script>
+</body>
+</html>
