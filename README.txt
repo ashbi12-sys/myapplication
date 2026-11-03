@@ -7,8 +7,10 @@ Learning Hub - GitHub Pages package
 
 All pages must be in the same folder so the navigation links work.
 
-Labs > Hand Massage 3D (Home Economics): learn 7 steps, then practice by dragging the tools in 3 levels.
-It needs no internet libraries, so it also works offline.
+Labs (Home Economics):
+- Hand Massage: realistic hand (3 skin tones) and real tools. 7 lessons, then 3 practice levels.
+- Dressmaking: 8 lessons on a dress form and fabric, then 3 practice levels with real sewing tools.
+Both work without internet libraries.
 
 How quiz progress reaches the class record:
 - Students type their name, then take a quiz. The result is saved in that browser.
