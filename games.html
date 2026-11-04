@@ -139,10 +139,11 @@ function scramble(el){
 const GAMES=[{n:"🧠 Memory Match",f:memory},{n:"🔤 Word Scramble",f:scramble}];
 GAMES.forEach((g,k)=>{
   const b=document.createElement("button");b.className="tab";b.setAttribute("role","tab");b.textContent=g.n;
-  b.onclick=()=>{document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-selected",t===b));g.f($("panel"))};
+  b.onclick=ev=>{if(ev&&ev.isTrusted)try{localStorage.setItem("hub-last",JSON.stringify({t:g.n.replace(/^\S+\s/,""),href:"games.html#"+["memory","scramble"][k]}))}catch(e){}document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-selected",t===b));g.f($("panel"))};
   $("tabs").append(b);
   if(!k)b.click();
 });
+if(location.hash==="#scramble")document.querySelectorAll(".tab")[1].click();
 </script>
 </body>
 </html>

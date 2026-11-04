@@ -434,10 +434,11 @@ function dressmaking(el){LAB3D.dress(el)}
 const LABS=[{n:"💻 Binary",f:binary},{n:"🍳 Recipe Scaler",f:recipe},{n:"🙌 Hand Massage",f:massage},{n:"👗 Dressmaking",f:dressmaking},{n:"📏 Measurement",f:measure},{n:"🌱 Planting",f:planting}];
 LABS.forEach((l,i)=>{
   const b=document.createElement("button");b.className="tab";b.setAttribute("role","tab");b.textContent=l.n;
-  b.onclick=()=>{if(window._mstop){window._mstop();window._mstop=null}document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-selected",t===b));l.f($("panel"))};
+  b.onclick=ev=>{if(ev&&ev.isTrusted)try{localStorage.setItem("hub-last",JSON.stringify({t:l.n.replace(/^\S+\s/,""),href:"labs.html#"+["binary","recipe","massage","dress","measure","planting"][i]}))}catch(e){}if(window._mstop){window._mstop();window._mstop=null}document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-selected",t===b));l.f($("panel"))};
   $("tabs").append(b);
   if(!i)b.click();
 });
+{const ix=["binary","recipe","massage","dress","measure","planting"].indexOf(location.hash.slice(1));if(ix>0)document.querySelectorAll(".tab")[ix].click()}
 </script>
 </body>
 </html>

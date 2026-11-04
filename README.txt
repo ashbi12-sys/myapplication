@@ -7,10 +7,8 @@ Learning Hub - GitHub Pages package
 
 All pages must be in the same folder so the navigation links work.
 
-Labs (Home Economics):
-- Hand Massage: realistic hand (3 skin tones) and real tools. 7 lessons, then 3 practice levels.
-- Dressmaking: 8 lessons on a dress form and fabric, then 3 practice levels with real sewing tools.
-Both work without internet libraries.
+Home page: search (press /), pin cards with the star, theme toggle, question of the day, progress rings, and quick links into each quiz, lab, and game.
+Labs: Hand Massage and Dressmaking (3D, realistic tools), plus Binary, Recipe Scaler, Measurement, and Planting.
 
 How quiz progress reaches the class record:
 - Students type their name, then take a quiz. The result is saved in that browser.

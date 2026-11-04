@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script>try{localStorage.setItem("hub-last",JSON.stringify({t:"Quiz Hub",href:"quiz.html"}))}catch(e){}</script>
 <title>TLE at Filipino Quiz Hub</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;800&display=swap" rel="stylesheet">
@@ -229,6 +230,9 @@ $("code").onclick=async()=>{
 $("who").value=store.get("student-name")||"";
 $("who").oninput=()=>{store.set("student-name",$("who").value);$("whomsg").textContent=""};
 renderHome();
+let pending=null;
+$("who").addEventListener("keydown",e=>{if(e.key==="Enter"&&pending&&$("who").value.trim()){const s=pending;pending=null;start(s)}});
+{const s=BANK.find(x=>x.id===location.hash.slice(1));if(s){if($("who").value.trim())start(s);else{pending=s;$("whomsg").textContent="Type your name and press Enter to start "+s.name+".";$("who").focus()}}}
 </script>
 </body>
 </html>

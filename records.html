@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script>try{localStorage.setItem("hub-last",JSON.stringify({t:"Class Record",href:"records.html"}))}catch(e){}</script>
 <title>Class Record Dashboard | Learning Hub</title>
 <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
@@ -315,6 +316,7 @@ document.addEventListener("visibilitychange",()=>{if(!document.hidden)qrender()}
 qrender();
 buildTable();update();
 qrender();
+if(location.hash==="#quiz")document.getElementById("qp").scrollIntoView();
 </script>
 </body>
 </html>
