@@ -1,18 +1,23 @@
 Learning Hub - GitHub Pages package
 
 1. Create a new GitHub repository.
-2. Upload these files (index.html, quiz.html, labs.html, games.html, records.html) to the repository root. Do not upload the folder itself.
+2. Upload these files to the repository root (not the folder itself):
+   index.html, quiz.html, labs.html, games.html, records.html, market.html
+   (marketplace-setup.sql is NOT uploaded to GitHub. You paste it into Supabase.)
 3. Go to Settings > Pages, choose your main branch and the root folder, then save.
 4. Your site will be at https://YOUR-USERNAME.github.io/REPO-NAME/
 
 All pages must be in the same folder so the navigation links work.
 
-Home page: search (press /), pin cards with the star, theme toggle, question of the day, progress rings, and quick links into each quiz, lab, and game.
-Labs: Hand Massage and Dressmaking (3D, realistic tools), plus Binary, Recipe Scaler, Measurement, and Planting.
+MARKETPLACE (market.html)
+- Works right away in DEMO MODE: listings stay on one device.
+- To share listings with every student you need a database. Free option: Supabase.
+  1. Create a free project at supabase.com (region near the Philippines).
+  2. SQL Editor > New query > paste marketplace-setup.sql > Run.
+  3. Project Settings > API: copy the Project URL and the public (anon / publishable) key.
+  4. On GitHub, edit market.html and paste them into CONFIG = { url: "...", key: "..." }. Commit.
+  5. Reload the Marketplace. The banner should say "Connected".
+- NEVER paste the service_role / secret key into the page.
+- To remove a bad post: Supabase > Table Editor > listings > set status to "removed".
 
-How quiz progress reaches the class record:
-- Students type their name, then take a quiz. The result is saved in that browser.
-- On the SAME device, Records > Quiz progress shows it automatically.
-- On OTHER devices, the student taps "Copy my progress code" after a quiz and sends it to you.
-  Paste the codes in Records > Import progress codes.
-- Use Download CSV to keep a permanent copy. Browser data can be cleared by the user.
+Class record: see Records > Quiz progress. Use Download CSV to keep a permanent copy.

@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>try{localStorage.setItem("hub-last",JSON.stringify({t:"Marketplace",href:"market.html"}))}catch(e){}</script>
+<title>Marketplace | Learning Hub</title>
+<script>(function(){var p=null;try{p=JSON.parse(localStorage.getItem("hub-theme"))}catch(e){}p=p||"auto";var d=p==="dark"||(p==="auto"&&matchMedia("(prefers-color-scheme:dark)").matches);document.documentElement.dataset.theme=d?"dark":"light"})()</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f2fb;--card:#fff;--line:#e3dff3;--ink:#211a45;--mute:#6a6591;--pri:#5b48e0;--tint:#ece9fb;--c:#0891b2;--t:#d6f3f9;--ct:#0b6378;--ok:#15803d;--bad:#c0262d;--warn:#b45309;--warnbg:#fef3c7;--shadow:0 1px 2px rgba(33,26,69,.05),0 10px 28px rgba(33,26,69,.07)}
+[data-theme=dark]{--bg:#110e24;--card:#1b1737;--line:#302a5a;--ink:#efecff;--mute:#a49fcd;--pri:#a493ff;--tint:#27224d;--c:#38d6f0;--t:#0f3440;--ct:#8fe6f6;--ok:#4ade80;--bad:#f87171;--warn:#fbbf24;--warnbg:#3a2f12;--shadow:0 1px 2px rgba(0,0,0,.35),0 10px 28px rgba(0,0,0,.3)}
+*{box-sizing:border-box}
+html{color-scheme:light dark}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Lexend,system-ui,sans-serif;line-height:1.55;min-height:100vh}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(600px 400px at 90% -5%,color-mix(in srgb,var(--c) 16%,transparent),transparent),radial-gradient(520px 380px at 0% 20%,color-mix(in srgb,var(--pri) 12%,transparent),transparent)}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+.ic{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.top{display:flex;align-items:center;justify-content:space-between;padding:24px 0 0}
+.back{display:inline-flex;align-items:center;gap:8px;color:var(--mute);text-decoration:none;font-weight:600;font-size:.92rem}
+.back:hover{color:var(--ink)}
+h1{font-size:clamp(2.2rem,7vw,3.6rem);font-weight:600;letter-spacing:-.04em;line-height:1.1;margin:30px 0 8px;background:linear-gradient(100deg,var(--ink) 30%,var(--c) 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:var(--mute);font-size:1.1rem;margin:0 0 20px}
+.mode{display:flex;align-items:center;gap:10px;flex-wrap:wrap;border-radius:16px;padding:10px 16px;font-size:.9rem;margin-bottom:18px}
+.mode.cloud{background:color-mix(in srgb,var(--ok) 12%,var(--card));border:1px solid color-mix(in srgb,var(--ok) 40%,transparent)}
+.mode.demo{background:var(--warnbg);border:1px solid color-mix(in srgb,var(--warn) 40%,transparent)}
+.mode button{margin-left:auto}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--ok)}.demo .dot{background:var(--warn)}
+.safe{font-size:.88rem;color:var(--mute);border-left:4px solid var(--c);background:var(--card);border-radius:0 14px 14px 0;padding:10px 16px;margin-bottom:20px}
+.btn{font:inherit;font-weight:600;border:1.5px solid var(--c);background:var(--c);color:#fff;border-radius:14px;padding:10px 18px;cursor:pointer}
+[data-theme=dark] .btn{color:#06222a}
+.btn.alt{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn.alt:hover{border-color:var(--c)}
+.btn.sm{padding:5px 12px;font-size:.85rem;border-radius:10px}
+.btn.bad{background:transparent;color:var(--bad);border-color:var(--bad)}
+.bar{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.search{flex:1 1 240px;display:flex;align-items:center;gap:10px;background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:0 14px}
+.search:focus-within{border-color:var(--c)}
+.search input{flex:1;border:0;background:transparent;color:var(--ink);font:inherit;padding:12px 0;outline:none;min-width:0}
+select,input,textarea{font:inherit;color:var(--ink);background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:9px 12px;max-width:100%}
+select:focus,input:focus,textarea:focus{outline:none;border-color:var(--c)}
+.tabs,.cats,.seg{display:flex;gap:8px;flex-wrap:wrap}
+.tab,.cat,.seg button{font:inherit;font-weight:600;font-size:.9rem;border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:6px 15px;cursor:pointer}
+.tab[aria-selected=true],.cat[aria-pressed=true],.seg button[aria-pressed=true]{background:var(--c);border-color:var(--c);color:#fff}
+[data-theme=dark] .tab[aria-selected=true],[data-theme=dark] .cat[aria-pressed=true],[data-theme=dark] .seg button[aria-pressed=true]{color:#06222a}
+.tabs{margin:6px 0 14px}
+.cats{margin-bottom:18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+.lcard{position:relative;text-align:left;font:inherit;color:inherit;background:var(--card);border:1.5px solid var(--line);border-radius:22px;padding:0;cursor:pointer;box-shadow:var(--shadow);transition:transform .18s,border-color .18s;overflow:hidden;animation:up .4s both}
+.lcard:hover{transform:translateY(-3px);border-color:var(--c)}
+.lcard:focus-visible,.btn:focus-visible,.tab:focus-visible,.cat:focus-visible{outline:3px solid var(--pri);outline-offset:2px}
+.em{height:110px;display:grid;place-items:center;font-size:3.4rem;background:linear-gradient(140deg,var(--t),color-mix(in srgb,var(--c) 22%,var(--card)))}
+.lb{padding:14px 16px 16px}
+.lb h3{margin:0 0 6px;font-size:1.02rem;font-weight:600;letter-spacing:-.01em;line-height:1.3;overflow-wrap:anywhere}
+.price{display:inline-block;font-weight:800;font-size:1.15rem;color:var(--ct)}
+.price.free{background:var(--t);border-radius:999px;padding:0 12px;font-size:.95rem}
+.meta{color:var(--mute);font-size:.8rem;margin-top:6px}
+.tag{display:inline-block;font-size:.72rem;font-weight:600;color:var(--ct);background:var(--t);border-radius:999px;padding:2px 10px;margin:8px 6px 0 0}
+.sold{position:absolute;top:12px;left:-30px;transform:rotate(-35deg);background:var(--bad);color:#fff;font-size:.75rem;font-weight:800;letter-spacing:.1em;padding:3px 40px}
+.heart{position:absolute;top:10px;right:10px;font-size:1.2rem;filter:drop-shadow(0 1px 2px rgba(0,0,0,.2))}
+.none{text-align:center;color:var(--mute);padding:50px 10px}
+.fab{position:fixed;right:22px;bottom:22px;box-shadow:0 10px 24px color-mix(in srgb,var(--c) 40%,transparent);padding:14px 22px;border-radius:999px}
+dialog{border:0;border-radius:24px;padding:0;background:var(--card);color:var(--ink);width:min(560px,94vw);max-height:92vh;box-shadow:0 30px 80px rgba(0,0,0,.35)}
+dialog::backdrop{background:rgba(17,14,36,.55);backdrop-filter:blur(3px)}
+.dp{padding:24px}
+.dp h2{margin:0 0 4px;font-size:1.4rem;letter-spacing:-.02em}
+.dp label{display:block;font-weight:600;font-size:.88rem;margin:14px 0 5px}
+.dp input,.dp select,.dp textarea{width:100%}
+.dp textarea{min-height:80px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:520px){.row2{grid-template-columns:1fr}}
+.emojis{display:flex;flex-wrap:wrap;gap:6px}
+.emojis button{font-size:1.4rem;width:44px;height:44px;border-radius:12px;border:2px solid var(--line);background:var(--bg);cursor:pointer}
+.emojis button[aria-pressed=true]{border-color:var(--c);background:var(--t)}
+.chk{display:flex;gap:10px;align-items:flex-start;font-weight:400!important;font-size:.88rem!important}
+.chk input{width:auto;margin-top:4px}
+.acts{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.err{color:var(--bad);font-size:.88rem;font-weight:600;min-height:1.2em;margin-top:8px}
+.big{font-size:4rem;text-align:center;background:linear-gradient(140deg,var(--t),color-mix(in srgb,var(--c) 22%,var(--card)));border-radius:18px;padding:14px;margin-bottom:14px}
+.kv{color:var(--mute);font-size:.9rem;margin:3px 0}
+.kv b{color:var(--ink)}
+pre{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px;overflow:auto;font-size:.78rem;max-height:240px}
+ol.g{padding-left:20px}ol.g li{margin:10px 0}
+.note{font-size:.85rem;color:var(--mute)}
+.toast{position:fixed;left:50%;bottom:90px;transform:translate(-50%,20px);background:var(--ink);color:var(--bg);padding:11px 18px;border-radius:14px;font-weight:600;opacity:0;pointer-events:none;transition:.25s;z-index:99}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+@keyframes up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="top"><a class="back" href="index.html"><svg class="ic" viewBox="0 0 24 24"><path d="m15 6-6 6 6 6"/></svg>Learning Hub</a></div>
+<h1>Marketplace</h1>
+<p class="sub">Buy, sell and give things away within your school.</p>
+<div class="mode" id="mode"></div>
+<div class="safe"><b>Stay safe:</b> meet inside school with a friend or teacher nearby, and never share your home address.</div>
+<div class="bar">
+<label class="search"><svg class="ic" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" type="search" placeholder="Search items…" aria-label="Search items" autocomplete="off"></label>
+<div class="seg" id="type" role="group" aria-label="Type"><button data-v="all" aria-pressed="true">All</button><button data-v="sale" aria-pressed="false">For sale</button><button data-v="free" aria-pressed="false">Free</button></div>
+<select id="sort" aria-label="Sort"><option value="new">Newest</option><option value="low">Price: low to high</option><option value="high">Price: high to low</option></select>
+</div>
+<div class="tabs" id="tabs" role="tablist"><button class="tab" role="tab" data-v="browse">Browse</button><button class="tab" role="tab" data-v="saved">Saved</button><button class="tab" role="tab" data-v="mine">My listings</button></div>
+<div class="cats" id="cats"></div>
+<div id="list" aria-live="polite"></div>
+</div>
+<button class="btn fab" id="sell">+ Sell or give away</button>
+<dialog id="dlg"></dialog>
+<div class="toast" id="toast" role="status"></div>
+<script>
+/* ====== DATABASE SETTINGS ======
+   Leave both empty = demo mode (listings stay on this device only).
+   Paste your Supabase Project URL and PUBLIC key (anon or publishable) to share listings with everyone.
+   NEVER paste the service_role / secret key here. */
+const CONFIG={url:"",key:""};
+/* ================================ */
+const CLOUD=!!(CONFIG.url&&CONFIG.key),BASE=CONFIG.url.replace(/\/+$/,"");
+const SQL=`-- Marketplace database for Learning Hub (Supabase / Postgres)
+-- Paste this whole file in Supabase > SQL Editor > New query > Run.
+
+create table if not exists public.listings (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  title text not null check (char_length(title) between 3 and 80),
+  description text check (char_length(description) <= 500),
+  price numeric not null default 0 check (price >= 0 and price <= 100000),
+  category text not null check (char_length(category) <= 30),
+  condition text not null check (char_length(condition) <= 20),
+  emoji text not null default '🛍️' check (char_length(emoji) <= 8),
+  seller text not null check (char_length(seller) between 2 and 40),
+  section text check (char_length(section) <= 40),
+  contact text not null check (char_length(contact) between 2 and 100),
+  meetup text check (char_length(meetup) <= 80),
+  status text not null default 'available' check (status in ('available','sold','removed'))
+);
+
+alter table public.listings enable row level security;
+
+-- Visitors can read listings that are not removed.
+create policy "read listings" on public.listings
+  for select using (status <> 'removed');
+
+-- Visitors can add a new listing (always starts as available).
+create policy "add listings" on public.listings
+  for insert with check (status = 'available');
+
+-- Visitors can only change the status column (sold / available / removed).
+create policy "change status" on public.listings
+  for update using (true) with check (status in ('available','sold','removed'));
+
+-- Limit what the public key is allowed to do.
+revoke all on public.listings from anon;
+grant select, insert on public.listings to anon;
+grant update (status) on public.listings to anon;
+`;
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const ls={get(k,d){try{const v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const CATS=[["Books","📚"],["Uniforms","👕"],["School supplies","✏️"],["Sewing and fabric","🧵"],["Tools","🔧"],["Plants and food","🌱"],["Gadgets","🎧"],["Other","🛍️"]];
+const EMOJIS=["📚","👕","✏️","🧵","🔧","🌱","🎧","🧮","👟","🎒","🍱","🛍️"],CONDS=["New","Like new","Used"],STAT=["available","sold","removed"];
+const peso=n=>Number(n)===0?"Free":"₱"+Number(n).toLocaleString("en-PH");
+const ago=iso=>{const s=(Date.now()-new Date(iso))/1000;if(!(s>=0))return"just now";if(s<60)return"just now";if(s<3600)return Math.floor(s/60)+" min ago";if(s<86400)return Math.floor(s/3600)+" h ago";return Math.floor(s/86400)+" d ago"};
+const toast=m=>{const t=$("#toast");t.textContent=m;t.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove("on"),2200)};
+
+/* ---------- data layer: cloud (Supabase REST) or local demo ---------- */
+const H=x=>{const h={apikey:CONFIG.key,...x};if(CONFIG.key.startsWith("eyJ"))h.Authorization="Bearer "+CONFIG.key;return h};
+const UUID=/^[0-9a-f-]{36}$/i;
+const SEED=()=>[
+ {title:"Scientific calculator (Casio fx-991ES)",price:450,category:"School supplies",condition:"Used",emoji:"🧮",seller:"Sample seller",description:"Works well. Includes the cover.",contact:"Ask at the Grade 9 room",meetup:"School canteen"},
+ {title:"Old Filipino textbook",price:0,category:"Books",condition:"Used",emoji:"📚",seller:"Sample seller",description:"Free to anyone who needs it.",contact:"Ask at the library",meetup:"School library"},
+ {title:"Sewing kit with thread and needles",price:120,category:"Sewing and fabric",condition:"Like new",emoji:"🧵",seller:"Sample seller",description:"Great for TLE dressmaking class.",contact:"Ask the TLE teacher",meetup:"TLE room"},
+ {title:"Gardening hand trowel",price:60,category:"Tools",condition:"Used",emoji:"🌱",seller:"Sample seller",description:"Still sharp and sturdy.",contact:"Ask at the AFA room",meetup:"School garden"}
+].map((s,i)=>({...s,id:"s"+i,status:"available",section:"",sample:true,created_at:new Date(Date.now()-(i+1)*36e5*5).toISOString()}));
+const api={
+ async list(){
+  if(CLOUD){const r=await fetch(BASE+"/rest/v1/listings?select=*&order=created_at.desc&limit=200",{headers:H()});if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}
+  let a=ls.get("market-listings-v1",null);if(!a){a=SEED();ls.set("market-listings-v1",a)}return a},
+ async add(it){
+  if(CLOUD){const r=await fetch(BASE+"/rest/v1/listings",{method:"POST",headers:H({"Content-Type":"application/json",Prefer:"return=representation"}),body:JSON.stringify(it)});if(!r.ok)throw new Error("HTTP "+r.status);return(await r.json())[0]}
+  const a=ls.get("market-listings-v1",[]),n={...it,id:"l"+Date.now().toString(36)+Math.random().toString(36).slice(2,6),status:"available",created_at:new Date().toISOString()};a.unshift(n);ls.set("market-listings-v1",a);return n},
+ async setStatus(id,status){
+  if(!STAT.includes(status))return;
+  if(CLOUD){if(!UUID.test(id))return;const r=await fetch(BASE+"/rest/v1/listings?id=eq."+id,{method:"PATCH",headers:H({"Content-Type":"application/json",Prefer:"return=minimal"}),body:JSON.stringify({status})});if(!r.ok)throw new Error("HTTP "+r.status);return}
+  const a=ls.get("market-listings-v1",[]);const x=a.find(i=>i.id===id);if(x)x.status=status;ls.set("market-listings-v1",a)}
+};
+
+/* ---------- state ---------- */
+let items=[],view="browse",cat="All",type="all",loadErr="";
+let mine=ls.get("market-mine",[]),saved=ls.get("market-saved",[]);
+const emo=i=>EMOJIS.includes(i.emoji)?i.emoji:"🛍️";
+
+async function refresh(quiet){
+ try{items=(await api.list()).filter(i=>STAT.includes(i.status));loadErr=""}catch(e){loadErr="Could not load listings. Check your internet connection or the database setup.";if(!quiet)console.warn(e)}
+ render()}
+
+function visible(){
+ const q=$("#q").value.trim().toLowerCase(),s=$("#sort").value;
+ let a=items.filter(i=>i.status!=="removed");
+ if(view==="saved")a=a.filter(i=>saved.includes(i.id));
+ else if(view==="mine")a=a.filter(i=>mine.includes(i.id));
+ if(cat!=="All")a=a.filter(i=>i.category===cat);
+ if(type==="free")a=a.filter(i=>Number(i.price)===0);else if(type==="sale")a=a.filter(i=>Number(i.price)>0);
+ if(q)a=a.filter(i=>(i.title+" "+(i.description||"")+" "+i.category+" "+i.seller).toLowerCase().includes(q));
+ a=a.slice();if(s==="low")a.sort((x,y)=>x.price-y.price);else if(s==="high")a.sort((x,y)=>y.price-x.price);else a.sort((x,y)=>new Date(y.created_at)-new Date(x.created_at));
+ return a}
+
+function render(){
+ $("#mode").className="mode "+(CLOUD?"cloud":"demo");
+ $("#mode").innerHTML=CLOUD?`<span class="dot"></span><span>Connected: listings are shared with everyone who uses this site.</span><button class="btn alt sm" data-a="guide">Setup guide</button>`:`<span class="dot"></span><span><b>Demo mode:</b> listings are saved only on this device. Connect a database to share them.</span><button class="btn alt sm" data-a="guide">How to connect</button>`;
+ document.querySelectorAll("#tabs .tab").forEach(b=>b.setAttribute("aria-selected",b.dataset.v===view));
+ $("#cats").innerHTML=["All",...CATS.map(c=>c[0])].map(c=>`<button class="cat" data-c="${esc(c)}" aria-pressed="${c===cat}">${esc(c)}</button>`).join("");
+ document.querySelectorAll("#type button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.v===type));
+ if(loadErr){$("#list").innerHTML=`<p class="none">${esc(loadErr)}<br><br><button class="btn alt sm" data-a="retry">Try again</button></p>`;return}
+ const a=visible();
+ $("#list").innerHTML=a.length?`<div class="grid">${a.map((i,n)=>`<button class="lcard" data-id="${esc(i.id)}" style="animation-delay:${Math.min(n,12)*35}ms"><div class="em">${emo(i)}</div>${i.status==="sold"?'<span class="sold">SOLD</span>':""}${saved.includes(i.id)?'<span class="heart" aria-label="Saved">♥</span>':""}<div class="lb"><h3>${esc(i.title)}</h3><span class="price ${Number(i.price)===0?"free":""}">${peso(i.price)}</span><div><span class="tag">${esc(i.category)}</span><span class="tag">${esc(i.condition)}</span></div><div class="meta">${esc(i.seller)} · ${ago(i.created_at)}${i.sample?" · sample":""}</div></div></button>`).join("")}</div>`:`<p class="none">${view==="mine"?"You have not posted anything on this device yet.":view==="saved"?"Nothing saved yet. Open an item and tap Save.":"No items match. Try another word or category."}</p>`}
+
+/* ---------- dialogs ---------- */
+const dlg=$("#dlg");
+const open=h=>{dlg.innerHTML=h;if(!dlg.open)dlg.showModal()};
+dlg.addEventListener("click",e=>{if(e.target===dlg||e.target.closest("[data-close]"))dlg.close()});
+
+function detail(id){
+ const i=items.find(x=>x.id===id);if(!i)return;
+ const own=mine.includes(i.id),sv=saved.includes(i.id);
+ open(`<div class="dp"><div class="big">${emo(i)}</div><h2>${esc(i.title)}</h2><p><span class="price ${Number(i.price)===0?"free":""}">${peso(i.price)}</span>${i.status==="sold"?' <b style="color:var(--bad)">SOLD</b>':""}</p><div><span class="tag">${esc(i.category)}</span><span class="tag">${esc(i.condition)}</span></div>${i.description?`<p>${esc(i.description)}</p>`:""}<p class="kv"><b>Seller:</b> ${esc(i.seller)}${i.section?" ("+esc(i.section)+")":""}</p>${i.meetup?`<p class="kv"><b>Meet-up:</b> ${esc(i.meetup)}</p>`:""}<p class="kv"><b>Posted:</b> ${ago(i.created_at)}</p><p class="kv" id="ct"></p><div class="acts"><button class="btn" data-a="contact" data-id="${esc(i.id)}">Show contact</button><button class="btn alt" data-a="save" data-id="${esc(i.id)}">${sv?"♥ Saved":"♡ Save"}</button>${own?(i.status==="sold"?`<button class="btn alt" data-a="avail" data-id="${esc(i.id)}">Mark available</button>`:`<button class="btn alt" data-a="sold" data-id="${esc(i.id)}">Mark as sold</button>`)+`<button class="btn bad" data-a="remove" data-id="${esc(i.id)}">Remove</button>`:""}<button class="btn alt" data-close>Close</button></div><p class="err" id="derr"></p></div>`)}
+
+function sellForm(){
+ const nm=String(ls.get("student-name","")||"").trim();let em=EMOJIS[0];
+ open(`<form class="dp" id="sf" novalidate><h2>Sell or give away</h2><p class="note">Photos are not used. Pick an emoji instead. This keeps everyone's privacy safe.</p>
+<label for="f-title">What is it?</label><input id="f-title" maxlength="80" required placeholder="Example: TLE sewing kit">
+<div class="row2"><div><label for="f-cat">Category</label><select id="f-cat">${CATS.map(c=>`<option>${esc(c[0])}</option>`).join("")}</select></div><div><label for="f-cond">Condition</label><select id="f-cond">${CONDS.map(c=>`<option>${c}</option>`).join("")}</select></div></div>
+<div class="row2"><div><label for="f-price">Price (₱)</label><input id="f-price" type="number" min="0" max="100000" step="1" value="0"></div><div><label>&nbsp;</label><label class="chk"><input type="checkbox" id="f-free"> Give away for free</label></div></div>
+<label>Picture</label><div class="emojis" id="f-em">${EMOJIS.map(e=>`<button type="button" data-e="${e}" aria-pressed="${e===em}" aria-label="Emoji ${e}">${e}</button>`).join("")}</div>
+<label for="f-desc">Description (optional)</label><textarea id="f-desc" maxlength="500" placeholder="Size, brand, how it was used…"></textarea>
+<div class="row2"><div><label for="f-name">Your name</label><input id="f-name" maxlength="40" required value="${esc(nm)}"></div><div><label for="f-sec">Section or class (optional)</label><input id="f-sec" maxlength="40"></div></div>
+<div class="row2"><div><label for="f-meet">Meet-up place</label><input id="f-meet" maxlength="80" placeholder="Inside the school"></div><div><label for="f-contact">How to reach you</label><input id="f-contact" maxlength="100" required placeholder="Use a school-approved way"></div></div>
+<label class="chk"><input type="checkbox" id="f-safe"> I will meet inside school and will not share my home address.</label>
+<p class="err" id="ferr" role="alert"></p><div class="acts"><button class="btn" type="submit">Post it</button><button class="btn alt" type="button" data-close>Cancel</button></div></form>`);
+ $("#f-em").onclick=e=>{const b=e.target.closest("[data-e]");if(!b)return;em=b.dataset.e;document.querySelectorAll("#f-em button").forEach(x=>x.setAttribute("aria-pressed",x===b))};
+ $("#f-cat").onchange=e=>{const c=CATS.find(x=>x[0]===e.target.value);if(c){em=c[1];document.querySelectorAll("#f-em button").forEach(x=>x.setAttribute("aria-pressed",x.dataset.e===em))}};
+ $("#f-free").onchange=e=>{$("#f-price").disabled=e.target.checked;if(e.target.checked)$("#f-price").value=0};
+ $("#sf").onsubmit=async e=>{e.preventDefault();
+  const v=id=>$(id).value.trim(),err=m=>{$("#ferr").textContent=m},price=$("#f-free").checked?0:Number($("#f-price").value);
+  if(v("#f-title").length<3)return err("Please write what the item is (at least 3 letters).");
+  if(!(price>=0&&price<=100000))return err("Price must be between 0 and 100,000.");
+  if(v("#f-name").length<2)return err("Please write your name.");
+  if(v("#f-contact").length<2)return err("Please tell buyers how to reach you.");
+  if(!$("#f-safe").checked)return err("Please agree to the safety promise.");
+  const btn=e.submitter;btn.disabled=true;btn.textContent="Posting…";
+  try{const n=await api.add({title:v("#f-title"),description:v("#f-desc"),price,category:$("#f-cat").value,condition:$("#f-cond").value,emoji:em,seller:v("#f-name"),section:v("#f-sec"),contact:v("#f-contact"),meetup:v("#f-meet")});
+   mine.push(n.id);ls.set("market-mine",mine);if(v("#f-name"))ls.set("student-name",v("#f-name"));dlg.close();view="mine";toast("Posted!");await refresh()}
+  catch(x){btn.disabled=false;btn.textContent="Post it";err("Could not post. Check your internet or the database setup.")}}}
+
+function guide(){
+ open(`<div class="dp"><h2>Connect a database</h2><p class="note">Right now ${CLOUD?"this page is connected":"listings stay on one device"}. To share listings with every student, use a free Supabase database.</p>
+<ol class="g"><li>Make a free account at <b>supabase.com</b> and create a <b>New project</b>. Choose a region close to the Philippines and save the database password.</li>
+<li>Open <b>SQL Editor</b> → <b>New query</b>. Paste the SQL below and press <b>Run</b>.</li>
+<li>Open <b>Project Settings → API</b>. Copy the <b>Project URL</b> and the <b>public key</b> (called <i>anon</i> or <i>publishable</i>).</li>
+<li>In GitHub, open <b>market.html</b>, click the pencil (Edit), paste them into <code>CONFIG</code>, then <b>Commit changes</b>.</li>
+<li>Wait about a minute, reload this page. The top banner will say <b>Connected</b>.</li></ol>
+<div class="acts" style="margin-top:0"><button class="btn sm" data-a="copysql">Copy the SQL</button></div><pre id="sqlbox">${esc(SQL)}</pre>
+<p class="note"><b>Never</b> paste the <i>service_role</i> or secret key into the page. The public key is meant to be visible; the SQL rules limit what visitors can do (read, add, and change the status only).</p>
+<p class="note"><b>To remove a bad post:</b> Supabase → Table Editor → listings → set status to <i>removed</i>.</p>
+<p class="note">Free projects can pause after about a week of no use. Open the dashboard and tap Restore.</p>
+<div class="acts"><button class="btn alt" data-close>Close</button></div></div>`)}
+
+/* ---------- events ---------- */
+document.addEventListener("click",async e=>{
+ const c=e.target.closest(".cat");if(c){cat=c.dataset.c;render();return}
+ const t=e.target.closest("#type button");if(t){type=t.dataset.v;render();return}
+ const tb=e.target.closest("#tabs .tab");if(tb){view=tb.dataset.v;render();return}
+ const card=e.target.closest(".lcard");if(card){detail(card.dataset.id);return}
+ const a=e.target.closest("[data-a]");if(!a)return;const id=a.dataset.id,k=a.dataset.a;
+ if(k==="guide")guide();else if(k==="retry")refresh();
+ else if(k==="copysql"){try{await navigator.clipboard.writeText(SQL);toast("SQL copied")}catch(x){const r=document.createRange();r.selectNodeContents($("#sqlbox"));getSelection().removeAllRanges();getSelection().addRange(r);toast("Press Ctrl+C to copy")}}
+ else if(k==="contact"){const i=items.find(x=>x.id===id);$("#ct").innerHTML=`<b>Contact:</b> ${esc(i.contact||"Ask the seller at school")}`;a.remove()}
+ else if(k==="save"){saved=saved.includes(id)?saved.filter(x=>x!==id):[...saved,id];ls.set("market-saved",saved);a.textContent=saved.includes(id)?"♥ Saved":"♡ Save";render()}
+ else if(k==="sold"||k==="avail"||k==="remove"){
+  if(!mine.includes(id))return;
+  if(k==="remove"&&!confirm("Remove this listing?"))return;
+  try{await api.setStatus(id,k==="sold"?"sold":k==="avail"?"available":"removed");dlg.close();toast(k==="remove"?"Removed":"Updated");await refresh()}catch(x){$("#derr").textContent="Could not update. Try again."}}
+});
+$("#q").addEventListener("input",render);$("#sort").addEventListener("change",render);
+$("#sell").onclick=sellForm;
+setInterval(()=>{if(CLOUD&&!document.hidden&&!dlg.open)refresh(true)},30000);
+document.addEventListener("visibilitychange",()=>{if(CLOUD&&!document.hidden&&!dlg.open)refresh(true)});
+const hh=location.hash.slice(1);if(hh==="free")type="free";if(hh==="mine")view="mine";
+refresh().then(()=>{if(hh==="sell")sellForm()});
+</script>
+</body>
+</html>
