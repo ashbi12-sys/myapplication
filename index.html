@@ -282,8 +282,8 @@ const isUnread=c=>sess&&c.last_sender&&c.last_sender!==sess.user.id&&new Date(c.
 async function pollUnread(){if(!sess||!READY||document.hidden)return;try{const r=await http("/rest/v1/conversations?"+qs([["select","id,buyer_id,seller_id,last_sender,last_message_at,buyer_last_read,seller_last_read"],["order","last_message_at.desc"],["limit","100"]]));const n=r.filter(isUnread).length;if(n!==unreadCount){unreadCount=n;renderHeader()}}catch(e){}}
 
 /* ================= data helpers ================= */
-const SAMPLE=[["Samsung Galaxy A54 128GB","Mobile phones","Like new",14500,"Region VII (Central Visayas)","Cebu City","Ana","Complete with box and charger."],["Study table with drawer","Home and furniture","Used",1200,"NCR (Metro Manila)","Quezon City","Ben","Sturdy wood. Pick up only."],["Free: used school books (Grade 7)","Books and school","Used",0,"Region XI (Davao)","Davao City","Carla","Give away to anyone who needs them."],["Sewing machine (portable)","Sewing and fabric","Used",3500,"Region III (Central Luzon)","Angeles City","Dina","Works well. Includes extra needles."],["Gardening tool set","Tools","New",450,"Region VI (Western Visayas)","Iloilo City","Eli","Trowel, fork, and gloves."],["Basketball (size 7)","Sports","Like new",300,"Region X (Northern Mindanao)","Cagayan de Oro","Fe","Barely used."]].map((a,i)=>({id:"d"+i,title:a[0],category:a[1],condition:a[2],price:a[3],region:a[4],city:a[5],seller:{display_name:a[6],region:a[4],created_at:new Date(Date.now()-9e9).toISOString()},description:a[7],thumbs:[],photos:[],status:"available",created_at:new Date(Date.now()-(i+1)*9e6).toISOString(),user_id:"demo"}));
-const PAGE=24,LSEL="id,title,price,category,condition,region,city,thumbs,created_at,status,user_id,seller:profiles(display_name)";
+const SAMPLE=[["Samsung Galaxy A54 128GB","Mobile phones","Like new",14500,"Region VII (Central Visayas)","Cebu City","Ana","Complete with box and charger."],["Study table with drawer","Home and furniture","Used",1200,"NCR (Metro Manila)","Quezon City","Ben","Sturdy wood. Pick up only."],["Free: used school books (Grade 7)","Books and school","Used",0,"Region XI (Davao)","Davao City","Carla","Give away to anyone who needs them."],["Sewing machine (portable)","Sewing and fabric","Used",3500,"Region III (Central Luzon)","Angeles City","Dina","Works well. Includes extra needles."],["Gardening tool set","Tools","New",450,"Region VI (Western Visayas)","Iloilo City","Eli","Trowel, fork, and gloves."],["Basketball (size 7)","Sports","Like new",300,"Region X (Northern Mindanao)","Cagayan de Oro","Fe","Barely used."]].map((a,i)=>({id:"d"+i,title:a[0],category:a[1],condition:a[2],price:a[3],region:a[4],city:a[5],seller:{display_name:a[6],region:a[4],created_at:new Date(Date.now()-9e9).toISOString()},description:a[7],thumbs:[],photos:[],status:"available",created_at:new Date(Date.now()-(i+1)*9e6).toISOString(),seller_id:"demo"}));
+const PAGE=24,LSEL="id,title,price,category,condition,region,city,thumbs,created_at,status,seller_id,seller:profiles(display_name)";
 async function fetchListings(f,offset){
  if(DEMO){let a=SAMPLE.filter(l=>(!f.cat||l.category===f.cat)&&(!f.region||l.region===f.region)&&(!f.q||(l.title+" "+l.description).toLowerCase().includes(f.q.toLowerCase()))&&(!f.free||l.price===0)&&(f.min===""||l.price>=+f.min)&&(f.max===""||l.price<=+f.max));if(f.sort==="low")a.sort((x,y)=>x.price-y.price);if(f.sort==="high")a.sort((x,y)=>y.price-x.price);return a.slice(offset,offset+PAGE)}
  const p=[["select",LSEL],["status","eq.available"]];
@@ -333,7 +333,7 @@ async function listingView(id){
  view.innerHTML='<p class="none"><span class="sp"></span> Loading…</p>';
  const l=await fetchListing(id);
  if(!l){view.innerHTML='<div class="panel"><h2>Item not found</h2><p>It may have been removed.</p><a class="btn" href="#/">Back to Marketplace</a></div>';return}
- const own=sess&&l.user_id===sess.user.id,sv=saved().includes(l.id),ph=l.photos||[];let cur=0;
+ const own=sess&&l.seller_id===sess.user.id,sv=saved().includes(l.id),ph=l.photos||[];let cur=0;
  const draw=()=>{$("#gm").innerHTML=ph.length?`<img src="${esc(pub(ph[cur]))}" alt="Photo ${cur+1} of ${ph.length} of ${esc(l.title)}">`:`<span class="ph">${emoOf(l.category)}</span>`;$$("#gt button").forEach((b,i)=>b.setAttribute("aria-current",i===cur))};
  const s=l.seller||{};
  view.innerHTML=`<p><a href="#/">← Back</a></p><div class="det"><div class="gal"><div class="main" id="gm" role="button" tabindex="0" aria-label="Open photo bigger"></div>${ph.length>1?`<div class="thumbs" id="gt">${(l.thumbs&&l.thumbs.length===ph.length?l.thumbs:ph).map((t,i)=>`<button data-i="${i}" aria-label="Photo ${i+1}"><img src="${esc(pub(t))}" alt=""></button>`).join("")}</div>`:""}</div>
@@ -355,7 +355,7 @@ function photoPipeline(){
 async function sellView(editId){
  if(backendNeeded())return;
  if(!sess){view.innerHTML='<div class="panel"><h2>Log in to sell</h2><p>Create a free account or log in to post an item.</p><div class="acts"><button class="btn" data-act="login">Log in</button><button class="btn alt" data-act="signup">Create account</button></div></div>';return}
- let l=null;if(editId){view.innerHTML='<p class="none"><span class="sp"></span> Loading…</p>';l=await fetchListing(editId);if(!l||l.user_id!==sess.user.id){view.innerHTML='<div class="panel"><h2>You cannot edit this item</h2><a class="btn" href="#/">Back</a></div>';return}}
+ let l=null;if(editId){view.innerHTML='<p class="none"><span class="sp"></span> Loading…</p>';l=await fetchListing(editId);if(!l||l.seller_id!==sess.user.id){view.innerHTML='<div class="panel"><h2>You cannot edit this item</h2><a class="btn" href="#/">Back</a></div>';return}}
  const v=l||{title:"",description:"",price:"",category:"",condition:"Used",region:(me&&me.region)||"",city:(me&&me.city)||""};
  let files=[];const conv=photoPipeline();
  view.innerHTML=`<p><a href="#/">← Back</a></p><form class="panel" id="sf" novalidate><h2>${l?"Edit your item":"Sell or give away"}</h2>
@@ -391,15 +391,15 @@ ${l?`<p class="note">To change photos, remove this item and post it again.</p>`:
     for(const [p,b] of [[pm,blobs.main],[pt,blobs.thumb]]){await http("/storage/v1/object/listing-photos/"+p.split("/").map(encodeURIComponent).join("/"),{method:"POST",body:b,headers:{"Content-Type":"image/jpeg","x-upsert":"false"},retry:false});up.push(p)}
     photos.push(pm);thumbs.push(pt)}
    btn.innerHTML='<span class="sp"></span> Posting…';
-   const r=await http("/rest/v1/listings",{method:"POST",body:{...body,user_id:sess.user.id,photos,thumbs},headers:{Prefer:"return=representation"},retry:false});
+   const r=await http("/rest/v1/listings",{method:"POST",body:{...body,photos,thumbs},headers:{Prefer:"return=representation"},retry:false});
    files.forEach(f=>URL.revokeObjectURL(f.url));toast("Posted!");location.hash="#/listing/"+r[0].id}
   catch(x){if(up.length)http("/storage/v1/object/listing-photos",{method:"DELETE",body:{prefixes:up},retry:false}).catch(()=>{});err(x.message||"Could not post. Please try again.");btn.disabled=false;btn.textContent=label}}}
 
 async function startChat(id){
  if(backendNeeded())return;if(needLogin(()=>startChat(id)))return;
- const l=await fetchListing(id);if(!l)return;if(l.user_id===sess.user.id)return toast("This is your own item.");
+ const l=await fetchListing(id);if(!l)return;if(l.seller_id===sess.user.id)return toast("This is your own item.");
  try{let r=await http("/rest/v1/conversations?"+qs([["listing_id","eq."+id],["buyer_id","eq."+sess.user.id],["select","id"]]));
-  if(!r.length){try{r=await http("/rest/v1/conversations",{method:"POST",body:{listing_id:id,seller_id:l.user_id},headers:{Prefer:"return=representation"},retry:false})}catch(e){r=await http("/rest/v1/conversations?"+qs([["listing_id","eq."+id],["buyer_id","eq."+sess.user.id],["select","id"]]));if(!r.length)throw e}}
+  if(!r.length){try{r=await http("/rest/v1/conversations",{method:"POST",body:{listing_id:id,seller_id:l.seller_id},headers:{Prefer:"return=representation"},retry:false})}catch(e){r=await http("/rest/v1/conversations?"+qs([["listing_id","eq."+id],["buyer_id","eq."+sess.user.id],["select","id"]]));if(!r.length)throw e}}
   location.hash="#/chat/"+r[0].id}catch(e){const b=$("#lerr");if(b)b.textContent=e.message;else toast(e.message)}}
 
 const CSEL="*,listing:listings(id,title,price,thumbs,status,category),buyer:profiles!conversations_buyer_fk(display_name),seller:profiles!conversations_seller_fk(display_name)";
@@ -450,7 +450,7 @@ async function meView(){
 <div class="panel"><h2>Delete my account</h2><p class="note">This removes your profile, items, and messages for good.</p><button class="btn bad" data-act="delacct">Delete my account</button></div>`;
  $("#pf2").onsubmit=async e=>{e.preventDefault();const n=$("#p-name").value.trim();if(n.length<2)return $("#p-err").textContent="Please enter a name.";
   try{await http("/rest/v1/profiles?id=eq."+sess.user.id,{method:"PATCH",body:{display_name:n,region:$("#p-reg").value||null,city:$("#p-city").value.trim()||null},headers:{Prefer:"return=minimal"},retry:false});await loadMe();toast("Profile saved.");$("#p-err").textContent=""}catch(x){$("#p-err").textContent=x.message}};
- try{const r=await http("/rest/v1/listings?"+qs([["user_id","eq."+sess.user.id],["status","neq.removed"],["select","id,title,price,thumbs,status,category,created_at"],["order","created_at.desc"]]));
+ try{const r=await http("/rest/v1/listings?"+qs([["seller_id","eq."+sess.user.id],["status","neq.removed"],["select","id,title,price,thumbs,status,category,created_at"],["order","created_at.desc"]]));
   $("#mine").innerHTML=r.length?r.map(l=>`<div class="mine"><div class="th">${l.thumbs&&l.thumbs[0]?`<img src="${esc(pub(l.thumbs[0]))}" alt="">`:emoOf(l.category)}</div><div class="tt"><a href="#/listing/${esc(l.id)}"><b>${esc(l.title)}</b></a><div class="mt">${peso(l.price)} · ${l.status==="sold"?"Sold":"Available"} · ${ago(l.created_at)}</div></div><a class="btn alt sm" href="#/edit/${esc(l.id)}">Edit</a>${l.status==="sold"?`<button class="btn alt sm" data-act="avail" data-id="${esc(l.id)}">Mark available</button>`:`<button class="btn alt sm" data-act="sold" data-id="${esc(l.id)}">Mark sold</button>`}<button class="btn bad sm" data-act="remove" data-id="${esc(l.id)}">Remove</button></div>`).join(""):'<p class="none">You have no items yet. <a href="#/sell">Sell something</a>.</p>'}
  catch(e){$("#mine").innerHTML=`<p class="none">Could not load. ${esc(e.message)}</p>`}}
 
@@ -469,7 +469,7 @@ function safetyView(){
 <div class="panel"><h2>Privacy notice</h2><ul class="rules"><li>We collect your email, display name, region and city, photos you upload, items you post, and your messages.</li><li>They are stored with our database provider (Supabase) and used only to run this Marketplace.</li><li>Your display name, region, items, and photos are public. Your email is not shown to other users. Messages are visible only to you and the other person (and the site admin when handling a report).</li><li>You can delete your account in <b>My account</b>. This removes your profile, items, and messages.</li><li>You must be 18 or older, or have a parent or guardian's permission.</li></ul>${C.contact?`<p class="note">Questions, reports, or data requests: <a href="mailto:${esc(C.contact)}">${esc(C.contact)}</a></p>`:""}</div>`}
 
 function setupView(){
- view.innerHTML=`<div class="panel"><h2>${READY?"Marketplace is connected":"Connect your database"}</h2>${READY?"<p>Everything is set up.</p>":`<p>Connect this Marketplace to your existing Supabase project. Follow <b>README.txt</b> to configure <b>config.js</b> and apply the compatibility migration only after reviewing it.</p><ol class="rules"><li>Keep your existing Supabase project and authentication users.</li><li>Use the existing listings owner column <b>user_id</b>.</li><li>Copy your Project URL and public publishable key into <b>config.js</b>.</li><li>Commit the updated files to your existing GitHub repository and reload this page.</li></ol><div class="acts"><button class="btn alt" id="dm">Preview with sample items</button></div><p class="note">Preview mode shows sample items only. Posting, photos, and chat need the database.</p>`}</div>`;
+ view.innerHTML=`<div class="panel"><h2>${READY?"Marketplace is connected":"Connect your database"}</h2>${READY?"<p>Everything is set up.</p>":`<p>Marketplace needs a database to share items, store photos, and run chat. Follow the steps in <b>README.txt</b>:</p><ol class="rules"><li>Create a free project at supabase.com.</li><li>Run <b>setup.sql</b> in the SQL Editor.</li><li>Copy the Project URL and the public key into <b>config.js</b>.</li><li>Commit the change on GitHub and reload this page.</li></ol><div class="acts"><button class="btn alt" id="dm">Preview with sample items</button></div><p class="note">Preview mode shows sample items only. Posting, photos, and chat need the database.</p>`}</div>`;
  if($("#dm"))$("#dm").onclick=()=>{try{sessionStorage.setItem("mk-demo","1")}catch(e){}DEMO=true;location.hash="#/";route()}}
 
 /* ================= actions ================= */
@@ -485,7 +485,7 @@ function reportDlg(lid,uid){
 function delDlg(){
  openDlg(`<form class="dp" id="df" novalidate><h2>Delete your account?</h2><p>This cannot be undone. Type <b>DELETE</b> to confirm.</p><input id="d-in" autocomplete="off"><p class="err" id="d-err" role="alert"></p><div class="acts"><button class="btn bad" type="submit">Delete forever</button><button type="button" class="btn alt" data-close>Cancel</button></div></form>`);
  $("#df").onsubmit=async e=>{e.preventDefault();if($("#d-in").value.trim()!=="DELETE")return $("#d-err").textContent="Type DELETE in capital letters.";
-  try{try{const mine=await http("/rest/v1/listings?"+qs([["user_id","eq."+sess.user.id],["select","photos,thumbs"]]));const ps=mine.flatMap(x=>[...(x.photos||[]),...(x.thumbs||[])]);if(ps.length)await http("/storage/v1/object/listing-photos",{method:"DELETE",body:{prefixes:ps},retry:false})}catch(_){}
+  try{try{const mine=await http("/rest/v1/listings?"+qs([["seller_id","eq."+sess.user.id],["select","photos,thumbs"]]));const ps=mine.flatMap(x=>[...(x.photos||[]),...(x.thumbs||[])]);if(ps.length)await http("/storage/v1/object/listing-photos",{method:"DELETE",body:{prefixes:ps},retry:false})}catch(_){}
    await http("/rest/v1/rpc/delete_my_account",{method:"POST",body:{},retry:false});$("#dlg").close();setSession(null);toast("Your account was deleted.");location.hash="#/";route()}catch(x){$("#d-err").textContent=x.message}}}
 function chatMenu(){const k=view._chat;if(!k)return;openDlg(`<div class="dp"><h2>Options</h2><div class="acts" style="flex-direction:column"><button class="btn alt" data-act="reportuser">Report this person</button><button class="btn bad" data-act="blockuser">Block this person</button><button class="btn alt" data-close>Close</button></div></div>`)}
 

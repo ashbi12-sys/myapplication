@@ -1,86 +1,64 @@
-LEARNING HUB MARKETPLACE — EXISTING PROJECT PACKAGE
-===================================================
+MARKETPLACE (PHILIPPINES) - SETUP GUIDE
+=======================================
+This is a SEPARATE website from the school Learning Hub. Put it in its OWN GitHub repository.
 
-This package adapts the Marketplace app you uploaded to the existing Supabase
-listings ownership column `user_id`. It does NOT ask you to create a new
-GitHub repository or a new Supabase project.
+Who can see it?
+- Browsing is public: anyone in the Philippines (or anywhere) who has the link can see the items.
+- To post, add photos, or chat, a person must make a free account (email + password).
 
 FILES
------
-market.html
-  Marketplace website. Listing ownership uses listings.user_id. Conversation
-  records continue to use conversations.seller_id, because that is a separate
-  table/relationship in the app.
+- index.html   the whole app
+- config.js    your database settings (you edit this one)
+- setup.sql    the database tables, rules and photo storage (you paste this into Supabase)
 
-config.js
-  Put your existing Supabase Project URL and PUBLIC publishable/anon key here.
-  Never put a service_role key or secret key in a browser file.
+STEP 1 - GITHUB (new repository)
+1. On GitHub, create a NEW repository, for example "marketplace".
+2. Upload index.html and config.js to the repository root.
+3. Settings > Pages > choose the main branch and root folder > Save.
+4. Your site will be at https://YOUR-USERNAME.github.io/marketplace/
+   (Open it now. It will say "Connect your database". That is normal.)
 
-migration-existing-supabase.sql
-  Narrow compatibility/security migration. It preserves existing listing
-  policies and data. It sets the user_id default, adds an owner index, removes
-  TRUNCATE/REFERENCES/TRIGGER privileges from authenticated on listings, and
-  prepares the listing-photos storage bucket and owner-folder policies.
+STEP 2 - SUPABASE PROJECT
+1. supabase.com > sign in with GitHub > New organization > New project.
+2. Save the database password. Region: Southeast Asia (Singapore).
 
-IMPORTANT DATABASE COMPATIBILITY NOTE
--------------------------------------
-The supplied policy results confirm that public.listings has `user_id` and
-`status`, and that four RLS policies already exist. The actual full column list
-was not supplied, so this package does not attempt to create or rename the
-remaining listing columns, profiles, conversations, messages, or reports.
-The app expects the listings fields used in its forms and display:
-  id, user_id, title, description, price, category, condition, region, city,
-  photos, thumbs, status, created_at
-It also expects the existing supporting tables/relations used by the original
-Marketplace package (profiles, conversations, messages, blocks, reports) and
-an Auth-linked profiles record for each user. Verify those structures against
-this project's schema before enabling the related features.
+STEP 3 - DATABASE
+1. Left menu > SQL Editor > New query.
+2. Paste ALL of setup.sql and press Run. It should say "Success".
+   (It is safe to run again if something went wrong.)
 
-INSTALLATION
-------------
-1. Extract this ZIP.
-2. Copy market.html and config.js into the existing GitHub repository location
-   where the current Marketplace page is hosted. Keep unrelated Learning Hub
-   files unchanged.
-3. Edit config.js. Enter the existing Supabase Project URL and PUBLIC key.
-4. Review migration-existing-supabase.sql. It is designed to preserve the four
-   known listings policies. Run it in Supabase SQL Editor only if the referenced
-   tables/storage schema are present and the statements match your project.
-5. Configure Supabase Auth URL settings to include your existing GitHub Pages
-   site URL and redirect URL.
-6. Commit the files and open the Marketplace page.
+STEP 4 - LOGIN SETTINGS
+1. Authentication > Sign In / Providers > Email: make sure Email is enabled.
+2. For an easy start, turn OFF "Confirm email". Users can then sign up and use the site right away.
+   (If you keep it ON, Supabase sends a confirmation email. The built-in email sender has a low
+   limit, so set up your own SMTP before a real launch.)
+3. Authentication > URL Configuration:
+   Site URL = your website address, e.g. https://YOUR-USERNAME.github.io/marketplace/
+   Add the same address under Redirect URLs. (Needed for password reset links.)
 
-CONFIGURATION EXAMPLE
----------------------
-window.MARKET_CONFIG = {
-  url: "https://YOUR-PROJECT-REF.supabase.co",
-  key: "YOUR_PUBLIC_PUBLISHABLE_OR_ANON_KEY",
-  contact: ""
-};
+STEP 5 - CONNECT THE WEBSITE
+1. Project Settings > API Keys: copy the Project URL and the PUBLISHABLE key (starts with sb_publishable_).
+   (If you only see "anon", that works too.)  NEVER use the secret or service_role key.
+2. On GitHub open config.js > pencil icon > paste the url and key between the quotes.
+   Add your email in contact so users can report problems. Commit changes.
+3. Wait 1 minute and reload the site. The "Connect your database" screen is gone.
 
-NOTES
------
-- Existing product listings count was reported as 0, so there are no listing
-  rows to migrate at the time of inspection.
-- Existing Auth users are not deleted or recreated by this package.
-- Existing RLS policy names and expressions are preserved.
-- Do not run the old setup.sql from the uploaded ZIP on the existing project:
-  it creates a different listings ownership model using seller_id.
-- The app sends user_id = the authenticated user's UUID when creating a listing.
-- The public key is safe to use in the browser only when RLS and grants are
-  correctly configured. Never expose service_role/secret keys.
+STEP 6 - TRY IT
+- Sign up, post an item with photos, then open the site in another browser/phone, sign up as
+  another person, and message the seller.
 
+MODERATION (you are the admin)
+- See reports: Table Editor > reports.
+- Hide a bad listing: Table Editor > listings > set status to "removed".
+- Ban a user: Table Editor > profiles > set is_banned to true.
+- Delete a user completely: Authentication > Users > delete.
 
-INDEX.HTML / DEPLOYMENT NOTE
-----------------------------
-This package includes BOTH index.html and market.html. They contain the same
-international marketplace application so either filename can serve as the
-marketplace entry page.
-
-IMPORTANT FOR YOUR EXISTING REPOSITORY:
-Your repository already has its own root index.html for the Learning Hub. Do NOT
-overwrite that homepage. Upload these marketplace files into a folder named
-marketplace/ in your repository. The marketplace will then be available at:
-https://ashbi12-sys.github.io/myapplication/marketplace/
-
-Keep the existing root index.html and other Learning Hub files unchanged.
+GOOD TO KNOW
+- Chat checks for new messages every few seconds. There are no push notifications.
+- To change an item's photos, remove the item and post it again.
+- The free Supabase plan has limits on storage and bandwidth, and a free project can pause after
+  about a week of no use (restore it in the dashboard). Check Supabase's pricing page.
+- No payments happen on the site. Tell users to meet in public places and never send money first.
+- You are running a public service that stores personal data (emails, names, photos, chats).
+  Keep the privacy notice, answer deletion requests, and ask your school or a legal adviser
+  about the Philippine Data Privacy Act if this will be used widely.
