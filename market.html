@@ -303,6 +303,56 @@ const db = createClient(
 // Make available to other module code in this file
 window.marketDB = db;
 console.log('Marketplace connected to Supabase!');
+const db = window.marketDB;
+// REGISTER
+async function registerUser(email, password, displayName) {
+  const { data, error } = await db.auth.signUp({
+    email: email,
+    password: password,
+    options: {
+      data: {
+        display_name: displayName
+      }
+    }
+  });
+  if (error) {
+    alert(error.message);
+    return;
+  }
+  alert('Registration submitted! Check your email if confirmation is required.');
+  return data;
+}
+// LOGIN
+async function loginUser(email, password) {
+  const { data, error } = await db.auth.signInWithPassword({
+    email: email,
+    password: password
+  });
+  if (error) {
+    alert(error.message);
+    return;
+  }
+  alert('Welcome back!');
+  return data;
+}
+// LOGOUT
+async function logoutUser() {
+  const { error } = await db.auth.signOut();
+  if (error) {
+    alert(error.message);
+    return;
+  }
+  alert('You have logged out.');
+}
+// CHECK CURRENT USER
+async function getCurrentUser() {
+  const { data, error } = await db.auth.getUser();
+  if (error) {
+    console.error(error);
+    return null;
+  }
+  return data.user;
+}
 </script>
 </body>
 </html>
