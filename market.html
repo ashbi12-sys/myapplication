@@ -294,7 +294,7 @@ import { createClient } from
 const SUPABASE_URL =
   'https://xybfspqdwoxraboneixr.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY =
-  'PASTE_YOUR_PUBLISHABLE_KEY_HERE';
+  'sb_publishable_K5L3z07d3RWjF8DeNzugkw_g7_FftKZ';
 // Create Supabase client
 const db = createClient(
   SUPABASE_URL,
@@ -353,6 +353,44 @@ async function getCurrentUser() {
   }
   return data.user;
 }
-</script>
+ <script type="module">
+// STEP 5: Supabase connection
+const db = createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY
+);
+// STEP 7: Registration
+async function registerUser(email, password, displayName) {
+  // Registration code
+}
+// STEP 7: Login
+async function loginUser(email, password) {
+  // Login code
+}
+// STEP 7: Logout
+async function logoutUser() {
+  // Logout code
+}
+// STEP 8: Create Listing
+async function createListing(product) {
+  // Create listing code
+}
+// STEP 9: Display Products
+async function loadListings() {
+  const { data, error } = await db
+    .from('listings')
+    .select('*')
+    .neq('status', 'removed')
+    .order('created_at', {
+    ascending: false
+    });
+  if (error) {
+    console.error(error);
+    return [];
+  }
+  console.log('Marketplace products:', data);
+  return data;
+}
+</script>  
 </body>
 </html>
