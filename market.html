@@ -287,6 +287,22 @@ setInterval(()=>{if(CLOUD&&!document.hidden&&!dlg.open)refresh(true)},30000);
 document.addEventListener("visibilitychange",()=>{if(CLOUD&&!document.hidden&&!dlg.open)refresh(true)});
 const hh=location.hash.slice(1);if(hh==="free")type="free";if(hh==="mine")view="mine";
 refresh().then(()=>{if(hh==="sell")sellForm()});
+<script type="module">
+import { createClient } from
+'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+// SUPABASE CONNECTION
+const SUPABASE_URL =
+  'https://xybfspqdwoxraboneixr.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY =
+  'PASTE_YOUR_PUBLISHABLE_KEY_HERE';
+// Create Supabase client
+const db = createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY
+);
+// Make available to other module code in this file
+window.marketDB = db;
+console.log('Marketplace connected to Supabase!');
 </script>
 </body>
 </html>
