@@ -9,10 +9,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;600;800&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#f4f2fb;--card:#fff;--line:#e3dff3;--ink:#211a45;--mute:#6a6591;--pri:#5b48e0;--pri2:#8b5cf6;--tint:#ece9fb;--hov:#faf9ff;--ok:#15803d;--bad:#c0262d;--shadow:0 1px 2px rgba(33,26,69,.05),0 10px 28px rgba(33,26,69,.07);
---c-quiz:#5b48e0;--t-quiz:#ebe8ff;--ct-quiz:#4535c4;--c-labs:#0e9f8e;--t-labs:#d8f4ef;--ct-labs:#0a6b5f;--c-games:#e63f77;--t-games:#fde4ec;--ct-games:#b01f4f;--c-rec:#e09a0a;--t-rec:#fdf0d0;--ct-rec:#8a5600;--c-market:#0891b2;--t-market:#d6f3f9;--ct-market:#0b6378}
+--c-quiz:#5b48e0;--t-quiz:#ebe8ff;--ct-quiz:#4535c4;--c-labs:#0e9f8e;--t-labs:#d8f4ef;--ct-labs:#0a6b5f;--c-games:#e63f77;--t-games:#fde4ec;--ct-games:#b01f4f;--c-rec:#e09a0a;--t-rec:#fdf0d0;--ct-rec:#8a5600}
 [data-theme=dark]{--bg:#110e24;--card:#1b1737;--line:#302a5a;--ink:#efecff;--mute:#a49fcd;--pri:#a493ff;--pri2:#c084fc;--tint:#27224d;--hov:#211c43;--ok:#4ade80;--bad:#f87171;--shadow:0 1px 2px rgba(0,0,0,.35),0 10px 28px rgba(0,0,0,.3);
---c-quiz:#9d8dff;--t-quiz:#2a2458;--ct-quiz:#c0b6ff;--c-labs:#34d3bd;--t-labs:#12363a;--ct-labs:#7de8d8;--c-games:#ff7aa6;--t-games:#3d1f3c;--ct-games:#ffa8c6;--c-rec:#ffc247;--t-rec:#3b3018;--ct-rec:#ffd98a;--c-market:#38d6f0;--t-market:#0f3440;--ct-market:#8fe6f6}
-.h-quiz{--c:var(--c-quiz);--t:var(--t-quiz);--ct:var(--ct-quiz)}.h-labs{--c:var(--c-labs);--t:var(--t-labs);--ct:var(--ct-labs)}.h-games{--c:var(--c-games);--t:var(--t-games);--ct:var(--ct-games)}.h-rec{--c:var(--c-rec);--t:var(--t-rec);--ct:var(--ct-rec)}.h-market{--c:var(--c-market);--t:var(--t-market);--ct:var(--ct-market)}
+--c-quiz:#9d8dff;--t-quiz:#2a2458;--ct-quiz:#c0b6ff;--c-labs:#34d3bd;--t-labs:#12363a;--ct-labs:#7de8d8;--c-games:#ff7aa6;--t-games:#3d1f3c;--ct-games:#ffa8c6;--c-rec:#ffc247;--t-rec:#3b3018;--ct-rec:#ffd98a}
+.h-quiz{--c:var(--c-quiz);--t:var(--t-quiz);--ct:var(--ct-quiz)}.h-labs{--c:var(--c-labs);--t:var(--t-labs);--ct:var(--ct-labs)}.h-games{--c:var(--c-games);--t:var(--t-games);--ct:var(--ct-games)}.h-rec{--c:var(--c-rec);--t:var(--t-rec);--ct:var(--ct-rec)}
 *{box-sizing:border-box}
 html{color-scheme:light dark}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:Lexend,system-ui,sans-serif;line-height:1.55;transition:background .25s,color .25s;min-height:100vh}
@@ -132,12 +132,10 @@ footer{color:var(--mute);font-size:.82rem;text-align:center;padding:44px 22px 36
 <symbol id="i-learn" viewBox="0 0 24 24"><path d="M3 6.5C5.5 5 8.5 5 12 7c3.5-2 6.5-2 9-.5V19c-2.5-1.5-5.5-1.5-9 .5-3.5-2-6.5-2-9-.5z"/><path d="M12 7v12.500"/></symbol>
 <symbol id="i-play" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m10 8.500 5.500 3.500-5.500 3.500z" fill="currentColor"/></symbol>
 <symbol id="i-teach" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="m8 10 2.500 2.500L16 8M8 20h8M12 16v4"/></symbol>
-<symbol id="i-together" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.200"/><circle cx="17" cy="9" r="2.600"/><path d="M3 19c0-3.300 2.700-5.500 6-5.500s6 2.200 6 5.500M15.500 14c3 0 5.500 1.700 5.500 4.500"/></symbol>
 <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.500 10.900c.6.5 1 1.200 1 2.100h5c0-.9.4-1.600 1-2.100A6 6 0 0 0 12 3z"/></symbol>
 <symbol id="a-quiz" viewBox="0 0 64 64"><rect x="9" y="9" width="38" height="46" rx="9" fill="var(--c)" opacity=".22" transform="rotate(-9 28 32)"/><rect x="13" y="8" width="38" height="48" rx="9" fill="var(--card)" stroke="var(--c)" stroke-width="3.500"/><path d="M26 26a6.500 6.500 0 1 1 9.500 5.500C33.500 32.500 32 34 32 37" fill="none" stroke="var(--c)" stroke-width="4" stroke-linecap="round"/><circle cx="32" cy="46" r="2.600" fill="var(--c)"/><circle cx="51" cy="13" r="10" fill="var(--ok)"/><path d="m46.500 13 3.200 3.300L56 9.500" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 <symbol id="a-labs" viewBox="0 0 64 64"><path d="M25 7h14M28 7v17L13 50a5.500 5.500 0 0 0 5 8h28a5.500 5.500 0 0 0 5-8L36 24V7" fill="var(--card)" stroke="var(--c)" stroke-width="3.500" stroke-linejoin="round" stroke-linecap="round"/><path d="M18 42h28l6 10a3 3 0 0 1-2.600 4.500H14.600A3 3 0 0 1 12 52z" fill="var(--c)"/><circle class="a-b" cx="27" cy="38" r="3" fill="var(--c)"/><circle class="a-b a-b2" cx="35" cy="34" r="2.400" fill="var(--c)"/><circle class="a-b a-b3" cx="31" cy="30" r="2" fill="var(--c)"/></symbol>
 <symbol id="a-games" viewBox="0 0 64 64"><rect x="5" y="21" width="54" height="30" rx="15" fill="var(--c)"/><path d="M21 30v13M14.500 36.500h13" stroke="#fff" stroke-width="4" stroke-linecap="round"/><circle cx="43" cy="33" r="3.500" fill="#fff"/><circle cx="50" cy="40" r="3.500" fill="#fff" opacity=".85"/><path class="a-spk" d="M32 6l2.200 5.800L40 14l-5.800 2.200L32 22l-2.200-5.800L24 14l5.800-2.200z" fill="var(--c)"/><path class="a-spk" style="animation-delay:.8s" d="M52 8l1.200 3.100L56.300 12.300 53.200 13.500 52 16.600l-1.200-3.100L47.700 12.300l3.100-1.200z" fill="var(--c)"/></symbol>
-<symbol id="a-market" viewBox="0 0 64 64"><path d="M12 22h40l-3 32a4 4 0 0 1-4 3.600H19a4 4 0 0 1-4-3.600z" fill="var(--card)" stroke="var(--c)" stroke-width="3.500" stroke-linejoin="round"/><path d="M22 28v-6a10 10 0 0 1 20 0v6" fill="none" stroke="var(--c)" stroke-width="3.500" stroke-linecap="round"/><circle cx="32" cy="42" r="9" fill="var(--c)"/><text x="32" y="47.500" text-anchor="middle" font-size="14" font-weight="800" fill="#fff" font-family="Lexend,sans-serif">₱</text><path class="a-spk" d="M52 8l1.800 4.700 4.700 1.800-4.700 1.800L52 21l-1.800-4.700-4.700-1.800 4.700-1.800z" fill="var(--c)"/></symbol>
 <symbol id="a-rec" viewBox="0 0 64 64"><rect x="11" y="9" width="42" height="51" rx="9" fill="var(--card)" stroke="var(--c)" stroke-width="3.500"/><rect x="23" y="4" width="18" height="10" rx="4" fill="var(--c)"/><path d="M20 25h24" stroke="var(--c)" stroke-width="3" stroke-linecap="round" opacity=".5"/><rect class="a-bar" x="19" y="38" width="7" height="14" rx="2.500" fill="var(--c)"/><rect class="a-bar a-bar2" x="29" y="32" width="7" height="20" rx="2.500" fill="var(--c)"/><rect class="a-bar a-bar3" x="39" y="42" width="7" height="10" rx="2.500" fill="var(--c)"/></symbol>
 </svg>
 <div class="wrap">
@@ -186,11 +184,10 @@ const HUBS=[
  {id:"quiz",sec:"Learn",t:"Quiz Hub",d:"8 subjects with instant feedback and saved best scores.",href:"quiz.html",chips:QZ.map(q=>[q[1],"quiz.html#"+q[0]])},
  {id:"labs",sec:"Learn",t:"Interactive Labs",d:"Hand Massage, Dressmaking, binary, recipes, measuring, and planting.",href:"labs.html",chips:[["Hand Massage","labs.html#massage"],["Dressmaking","labs.html#dress"],["Binary","labs.html#binary"],["Recipe Scaler","labs.html#recipe"],["Measurement","labs.html#measure"],["Planting","labs.html#planting"]]},
  {id:"games",sec:"Play",t:"Fun Games",d:"Memory Match and Word Scramble using real lesson vocabulary.",href:"games.html",chips:[["Memory Match","games.html#memory"],["Word Scramble","games.html#scramble"]]},
- {id:"market",sec:"Together",t:"Marketplace",d:"Buy, sell and give things away within your school.",href:"market.html",chips:[["Sell something","market.html#sell"],["Free items","market.html#free"],["My listings","market.html#mine"]]},
  {id:"rec",sec:"Teacher",t:"Class Record",d:"A blank, editable record that tracks quiz progress automatically.",href:"records.html",chips:[["Quiz progress","records.html#quiz"]]}
 ];
 const ALL=[];HUBS.forEach(h=>{ALL.push({t:h.t,sub:h.sec,href:h.href,d:h.d,h:h.id});h.chips.forEach(c=>ALL.push({t:c[0],sub:"in "+h.t,href:c[1],d:"",h:h.id}))});
-const SECI={Learn:"learn",Play:"play",Together:"together",Teacher:"teach"};
+const SECI={Learn:"learn",Play:"play",Teacher:"teach"};
 
 /* ---- question of the day ---- */
 const QS=[
@@ -237,7 +234,7 @@ function render(){
  if(q){const r=ALL.filter(a=>(a.t+" "+a.sub+" "+a.d).toLowerCase().includes(q));
   $("#out").innerHTML=`<h2 class="sec">Results</h2>`+(r.length?`<div class="grid" style="grid-template-columns:1fr">${r.map(a=>`<article class="card lift res h-${a.h}" style="--i:${n++}"><a class="main" href="${a.href}" data-t="${esc(a.t)}">${art(a.h)}<span class="txt"><b>${esc(a.t)}</b><span>${esc(a.sub)}</span></span><svg class="chev"><use href="#i-chev"/></svg></a></article>`).join("")}</div>`:`<p class="none">Nothing matches “${esc($("#q").value)}”.</p>`);return}
  let h=`<h2 class="sec"><span class="cal">${now.getDate()}</span>Today</h2><div class="grid"><article class="card pad" id="qcard" style="--i:0">${qHTML()}</article><article class="card pad" id="pcard" style="--i:1">${stats()}</article></div>`;n=2;
- for(const s of["Learn","Play","Together","Teacher"]){const list=HUBS.filter(x=>x.sec===s).sort((a,b)=>pins.includes(b.id)-pins.includes(a.id));h+=`<h2 class="sec"><svg class="ic"><use href="#i-${SECI[s]}"/></svg>${s}</h2><div class="grid">${list.map(card).join("")}</div>`}
+ for(const s of["Learn","Play","Teacher"]){const list=HUBS.filter(x=>x.sec===s).sort((a,b)=>pins.includes(b.id)-pins.includes(a.id));h+=`<h2 class="sec"><svg class="ic"><use href="#i-${SECI[s]}"/></svg>${s}</h2><div class="grid">${list.map(card).join("")}</div>`}
  $("#out").innerHTML=h;countUp($("#pcard"));
 }
 
