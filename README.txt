@@ -1,64 +1,83 @@
-MARKETPLACE (PHILIPPINES) - SETUP GUIDE
-=======================================
-This is a SEPARATE website from the school Learning Hub. Put it in its OWN GitHub repository.
+LEARNING HUB MARKETPLACE — CLEANED EXISTING PROJECT PACKAGE
+==========================================================
 
-Who can see it?
-- Browsing is public: anyone in the Philippines (or anywhere) who has the link can see the items.
-- To post, add photos, or chat, a person must make a free account (email + password).
+This package is designed for your EXISTING GitHub repository and EXISTING
+Supabase project. It does not create a new repository or Supabase project.
+
+WHAT WAS CLEANED UP
+-------------------
+- index.html and market.html now use the same canonical application code.
+- Removed the conflicting old setup.sql and marketplace-setup.sql files. Those
+  scripts used seller_id and could conflict with your actual listings.user_id.
+- Removed the listings -> profiles embedded relationship from marketplace
+  queries. Seller profiles are fetched separately by profiles.id = listings.user_id,
+  so the original schema-cache relationship error no longer blocks browsing.
+- Kept conversations.seller_id separate; it belongs to the conversations table.
+- Added country_code and currency_code support to listings and the listing form.
+- The app displays each listing in its own currency. It does NOT convert currencies.
 
 FILES
-- index.html   the whole app
-- config.js    your database settings (you edit this one)
-- setup.sql    the database tables, rules and photo storage (you paste this into Supabase)
+-----
+index.html                       Marketplace entry page
+market.html                      Same Marketplace page (kept in sync)
+config.js                        Existing Supabase URL and public anon key
+migration-existing-supabase.sql  Migration for the existing database
+README.txt                       This guide
 
-STEP 1 - GITHUB (new repository)
-1. On GitHub, create a NEW repository, for example "marketplace".
-2. Upload index.html and config.js to the repository root.
-3. Settings > Pages > choose the main branch and root folder > Save.
-4. Your site will be at https://YOUR-USERNAME.github.io/marketplace/
-   (Open it now. It will say "Connect your database". That is normal.)
+INTERNATIONAL LISTINGS
+----------------------
+Sellers can choose a country, currency, state/province/region, and city.
+Listings are searchable by country. Supported currency choices include PHP,
+USD, EUR, GBP, CAD, AUD, SGD, HKD, JPY, KRW, CNY, INR, IDR, MYR, THB, VND,
+AED, SAR, NZD, CHF, SEK, NOK, DKK, ZAR, BRL, and MXN.
 
-STEP 2 - SUPABASE PROJECT
-1. supabase.com > sign in with GitHub > New organization > New project.
-2. Save the database password. Region: Southeast Asia (Singapore).
+Prices remain in the seller's selected currency. No automatic exchange-rate
+conversion, payment processing, customs calculation, or shipping integration
+is included in this package.
 
-STEP 3 - DATABASE
-1. Left menu > SQL Editor > New query.
-2. Paste ALL of setup.sql and press Run. It should say "Success".
-   (It is safe to run again if something went wrong.)
+INSTALLATION
+------------
+1. Make a backup/download of your current GitHub repository before replacing files.
+2. Extract this ZIP.
+3. In your existing repository, replace the root index.html and market.html
+   with the matching files from this package. Keep games.html, labs.html,
+   quiz.html, records.html, shared.css, and other unrelated Learning Hub files.
+4. Keep your existing config.js values. The included config.js is copied from
+   your uploaded repository; do not publish a service_role or secret key.
+5. Review migration-existing-supabase.sql, then run it in the EXISTING Supabase
+   project's SQL Editor. It does not drop tables, listings, users, or existing
+   listings RLS policies. It adds country_code and currency_code and prepares
+   listing photo storage policies.
+6. In Supabase Authentication > URL Configuration, ensure your GitHub Pages
+   site URL and redirect URLs are allowed.
+7. Commit the updated files to your existing GitHub repository and wait for
+   GitHub Pages deployment.
 
-STEP 4 - LOGIN SETTINGS
-1. Authentication > Sign In / Providers > Email: make sure Email is enabled.
-2. For an easy start, turn OFF "Confirm email". Users can then sign up and use the site right away.
-   (If you keep it ON, Supabase sends a confirmation email. The built-in email sender has a low
-   limit, so set up your own SMTP before a real launch.)
-3. Authentication > URL Configuration:
-   Site URL = your website address, e.g. https://YOUR-USERNAME.github.io/marketplace/
-   Add the same address under Redirect URLs. (Needed for password reset links.)
+IMPORTANT DATABASE REQUIREMENTS
+-------------------------------
+The current frontend expects these listings columns:
+id, user_id, title, description, price, currency_code, country_code,
+category, condition, region, city, photos, thumbs, status, created_at.
+It also expects profiles columns: id, display_name, region, city, created_at.
+Messaging and moderation features expect the existing profiles, conversations,
+messages, blocks, and reports tables and the conversation foreign keys named
+conversations_buyer_fk and conversations_seller_fk.
 
-STEP 5 - CONNECT THE WEBSITE
-1. Project Settings > API Keys: copy the Project URL and the PUBLISHABLE key (starts with sb_publishable_).
-   (If you only see "anon", that works too.)  NEVER use the secret or service_role key.
-2. On GitHub open config.js > pencil icon > paste the url and key between the quotes.
-   Add your email in contact so users can report problems. Commit changes.
-3. Wait 1 minute and reload the site. The "Connect your database" screen is gone.
+The migration deliberately does not invent missing supporting tables or alter
+unknown column definitions. If your existing schema is missing one of these
+requirements, that feature needs a matching migration before it can work.
 
-STEP 6 - TRY IT
-- Sign up, post an item with photos, then open the site in another browser/phone, sign up as
-  another person, and message the seller.
+SECURITY
+--------
+- Public visitors can browse only rows permitted by your existing SELECT RLS policy.
+- Authenticated users can create/edit/delete only rows allowed by your existing
+  user_id ownership policies.
+- Never put a Supabase service_role or secret key in config.js.
+- Keep RLS enabled. Do not run the old setup.sql from earlier packages.
 
-MODERATION (you are the admin)
-- See reports: Table Editor > reports.
-- Hide a bad listing: Table Editor > listings > set status to "removed".
-- Ban a user: Table Editor > profiles > set is_banned to true.
-- Delete a user completely: Authentication > Users > delete.
-
-GOOD TO KNOW
-- Chat checks for new messages every few seconds. There are no push notifications.
-- To change an item's photos, remove the item and post it again.
-- The free Supabase plan has limits on storage and bandwidth, and a free project can pause after
-  about a week of no use (restore it in the dashboard). Check Supabase's pricing page.
-- No payments happen on the site. Tell users to meet in public places and never send money first.
-- You are running a public service that stores personal data (emails, names, photos, chats).
-  Keep the privacy notice, answer deletion requests, and ask your school or a legal adviser
-  about the Philippine Data Privacy Act if this will be used widely.
+INTERNATIONAL LIMITATIONS
+-------------------------
+International country and currency fields support global listing metadata and
+browsing. This is not yet a full international commerce platform: payment
+processing, escrow, FX conversion, carrier rates, customs, tax, and dispute
+resolution integrations must be added separately before handling transactions.

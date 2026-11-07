@@ -1,30 +1,31 @@
--- Learning Hub Marketplace: compatibility/security migration for the EXISTING project
--- Known from the existing RLS policies: public.listings has user_id and status columns.
--- This script does NOT drop tables, rows, users, or existing RLS policies.
--- Review the comments before running. It only adjusts known listing permissions/defaults
--- and prepares the public photo bucket used by the frontend.
+-- Learning Hub Marketplace: EXISTING Supabase project migration
+-- Safe scope: no table drops, no row deletes, no auth-user changes, no policy drops.
+-- The frontend fetches seller profiles separately, so listings -> profiles embedding
+-- does NOT require a PostgREST foreign-key relationship.
 
 begin;
 
--- Ensure RLS remains enabled. Existing four listing policies are intentionally preserved.
+-- Existing listings table and ownership column are expected from the current project.
+-- Add only the international listing metadata needed by the updated frontend.
 alter table public.listings enable row level security;
+alter table public.listings
+  add column if not exists country_code text not null default 'PH',
+  add column if not exists currency_code text not null default 'PHP';
 
--- New listings created through the app explicitly send auth.uid(); this default is a fallback.
-alter table public.listings alter column user_id set default auth.uid();
+-- Normalize and validate ISO-style codes without changing existing prices.
+update public.listings set country_code = 'PH' where country_code is null or btrim(country_code) = '';
+update public.listings set currency_code = 'PHP' where currency_code is null or btrim(currency_code) = '';
 
--- Keep the owner lookup efficient.
 create index if not exists listings_user_id_idx on public.listings (user_id);
+create index if not exists listings_country_created_idx on public.listings (country_code, created_at desc);
+create index if not exists listings_currency_idx on public.listings (currency_code);
 
--- Remove powerful table-level privileges from ordinary signed-in users.
--- RLS does not replace these privilege restrictions (for example, TRUNCATE bypasses row policies).
+-- Ordinary users need row-level operations only. RLS policies remain the authority.
 revoke truncate, references, trigger on table public.listings from authenticated;
-
--- Ensure the intended application privileges exist. RLS policies still decide which rows
--- authenticated users may select/insert/update/delete.
 grant select on table public.listings to anon, authenticated;
 grant insert, update, delete on table public.listings to authenticated;
 
--- Public read bucket for listing photos. Upload/delete remain restricted by storage policies.
+-- Public listing images; uploads and deletes are restricted to the owner's folder.
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
 values ('listing-photos', 'listing-photos', true, 3145728,
         array['image/jpeg','image/png','image/webp'])
@@ -33,29 +34,27 @@ set public = excluded.public,
     file_size_limit = excluded.file_size_limit,
     allowed_mime_types = excluded.allowed_mime_types;
 
--- Idempotently create storage policies if their names are not already present.
 do $$ begin
   if not exists (select 1 from pg_policies where schemaname='storage' and tablename='objects' and policyname='learning hub listing photos public read') then
     create policy "learning hub listing photos public read" on storage.objects
-      for select to anon, authenticated
-      using (bucket_id = 'listing-photos');
+      for select to anon, authenticated using (bucket_id = 'listing-photos');
   end if;
   if not exists (select 1 from pg_policies where schemaname='storage' and tablename='objects' and policyname='learning hub listing photos owner upload') then
     create policy "learning hub listing photos owner upload" on storage.objects
-      for insert to authenticated
-      with check (bucket_id = 'listing-photos' and (storage.foldername(name))[1] = auth.uid()::text);
+      for insert to authenticated with check (bucket_id = 'listing-photos' and (storage.foldername(name))[1] = auth.uid()::text);
   end if;
   if not exists (select 1 from pg_policies where schemaname='storage' and tablename='objects' and policyname='learning hub listing photos owner delete') then
     create policy "learning hub listing photos owner delete" on storage.objects
-      for delete to authenticated
-      using (bucket_id = 'listing-photos' and (storage.foldername(name))[1] = auth.uid()::text);
+      for delete to authenticated using (bucket_id = 'listing-photos' and (storage.foldername(name))[1] = auth.uid()::text);
   end if;
 end $$;
 
 commit;
 
--- Expected existing listings policies (do not recreate or drop them):
+-- After running, refresh PostgREST schema cache:
+notify pgrst, 'reload schema';
+
+-- Existing four listings RLS policies are intentionally preserved:
 -- SELECT: status <> 'removed'
 -- INSERT: auth.uid() = user_id AND status = 'available'
--- UPDATE: auth.uid() = user_id (USING and WITH CHECK)
--- DELETE: auth.uid() = user_id
+-- UPDATE/DELETE: auth.uid() = user_id

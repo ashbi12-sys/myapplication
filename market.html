@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Buy, sell and give things away across the Philippines.">
-<title>Marketplace | Philippines</title>
+<meta name="description" content="Buy, sell and give things away in a global community marketplace.">
+<title>Learning Hub Marketplace | Global</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;600;800&display=swap" rel="stylesheet">
 <style>
@@ -141,7 +141,7 @@ ul.rules{padding-left:20px}ul.rules li{margin:6px 0}
 <body>
 <div class="off" id="off" role="status">You are offline. Some things will not work until you reconnect.</div>
 <header class="top"><div class="wrap nav">
-<a class="brand" href="#/"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="8" fill="#f5a400"/><g stroke="#f5a400" stroke-width="3" stroke-linecap="round"><path d="M20 3v5M20 32v5M3 20h5M32 20h5M8 8l3.500 3.500M28.500 28.500 32 32M8 32l3.500-3.500M28.500 11.500 32 8"/></g><circle cx="20" cy="20" r="3" fill="#1a56db"/></svg><span>Marketplace<small>Philippines</small></span></a>
+<a class="brand" href="#/"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="8" fill="#f5a400"/><g stroke="#f5a400" stroke-width="3" stroke-linecap="round"><path d="M20 3v5M20 32v5M3 20h5M32 20h5M8 8l3.500 3.500M28.500 28.500 32 32M8 32l3.500-3.500M28.500 11.500 32 8"/></g><circle cx="20" cy="20" r="3" fill="#1a56db"/></svg><span>Marketplace<small>Global</small></span></a>
 <nav id="nav" aria-label="Main"></nav>
 </div></header>
 <main class="wrap" id="view" tabindex="-1"></main>
@@ -159,7 +159,7 @@ let DEMO=false;if(!READY){try{DEMO=sessionStorage.getItem("mk-demo")==="1"||/[?&
 const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
 const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
-const peso=n=>Number(n)===0?"Free":"₱"+Number(n).toLocaleString("en-PH",{maximumFractionDigits:2});
+const formatPrice=(n,code="PHP")=>{if(Number(n)===0)return "Free";try{return new Intl.NumberFormat(undefined,{style:"currency",currency:(code||"PHP").toUpperCase(),maximumFractionDigits:2}).format(Number(n))}catch(e){return (code||"PHP").toUpperCase()+" "+Number(n).toLocaleString(undefined,{maximumFractionDigits:2})}};
 const ago=iso=>{const s=(Date.now()-new Date(iso))/1000;if(!(s>=60))return"just now";if(s<3600)return Math.floor(s/60)+" min ago";if(s<86400)return Math.floor(s/3600)+" h ago";if(s<2592000)return Math.floor(s/86400)+" d ago";return new Date(iso).toLocaleDateString("en-PH",{month:"short",day:"numeric",year:"numeric"})};
 const uuid=()=>window.crypto&&crypto.randomUUID?crypto.randomUUID():"xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c==="x"?r:(r&3|8)).toString(16)});
 const UUIDRE=/^[0-9a-f-]{36}$/i;
@@ -167,8 +167,12 @@ const qv=s=>encodeURIComponent(s);
 const toast=m=>{const t=$("#toast");t.textContent=m;t.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove("on"),2600)};
 const CATS=[["Electronics","💻"],["Mobile phones","📱"],["Home and furniture","🛋️"],["Clothing and shoes","👕"],["Books and school","📚"],["Sewing and fabric","🧵"],["Tools","🔧"],["Plants and food","🌱"],["Toys and baby","🧸"],["Sports","⚽"],["Pet supplies","🐾"],["Other","🛍️"]];
 const emoOf=c=>(CATS.find(x=>x[0]===c)||CATS[11])[1];
-const REGIONS=["NCR (Metro Manila)","CAR (Cordillera)","Region I (Ilocos)","Region II (Cagayan Valley)","Region III (Central Luzon)","Region IV-A (CALABARZON)","MIMAROPA","Region V (Bicol)","Region VI (Western Visayas)","Region VII (Central Visayas)","Region VIII (Eastern Visayas)","Region IX (Zamboanga Peninsula)","Region X (Northern Mindanao)","Region XI (Davao)","Region XII (SOCCSKSARGEN)","Region XIII (Caraga)","BARMM"];
-const regOpts=(sel,ph)=>`<option value="">${esc(ph)}</option>`+REGIONS.map(r=>`<option${r===sel?" selected":""}>${esc(r)}</option>`).join("");
+const COUNTRY_CODES="AD AE AF AG AI AL AM AO AQ AR AS AT AU AW AX AZ BA BB BD BE BF BG BH BI BJ BL BM BN BO BQ BR BS BT BV BW BY BZ CA CC CD CF CG CH CI CK CL CM CN CO CR CU CV CW CX CY CZ DE DJ DK DM DO DZ EC EE EG EH ER ES ET FI FJ FK FM FO FR GA GB GD GE GF GG GH GI GL GM GN GP GQ GR GS GT GU GW GY HK HM HN HR HT HU ID IE IL IM IN IO IQ IR IS IT JE JM JO JP KE KG KH KI KM KN KP KR KW KY KZ LA LB LC LI LK LR LS LT LU LV LY MA MC MD ME MF MG MH MK ML MM MN MO MP MQ MR MS MT MU MV MW MX MY MZ NA NC NE NF NG NI NL NO NP NR NU NZ OM PA PE PF PG PH PK PL PM PN PR PS PT PW PY QA RE RO RS RU RW SA SB SC SD SE SG SH SI SJ SK SL SM SN SO SR SS ST SV SX SY SZ TC TD TF TG TH TJ TK TL TM TN TO TR TT TV TW TZ UA UG UM US UY UZ VA VC VE VG VI VN VU WF WS YE YT ZA ZM ZW".split(" ");
+const countryName=code=>{try{return new Intl.DisplayNames([navigator.language||"en"],{type:"region"}).of(code)||code}catch(e){return code}};
+const countryOpts=(sel)=>COUNTRY_CODES.map(c=>`<option value="${c}"${c===sel?" selected":""}>${esc(countryName(c))} (${c})</option>`).join("");
+const CURRENCIES="PHP USD EUR GBP CAD AUD SGD HKD JPY KRW CNY INR IDR MYR THB VND AED SAR NZD CHF SEK NOK DKK ZAR BRL MXN".split(" ");
+const currencyOpts=(sel)=>CURRENCIES.map(c=>`<option value="${c}"${c===(sel||"PHP")?" selected":""}>${c}</option>`).join("");
+const regOpts=(sel,ph)=>`<option value="">${esc(ph)}</option>`;
 const pub=p=>BASE+"/storage/v1/object/public/listing-photos/"+String(p).split("/").map(encodeURIComponent).join("/");
 const view=$("#view");
 if(C.contact)$("#contact").innerHTML=` · Report a problem: <a href="mailto:${esc(C.contact)}">${esc(C.contact)}</a>`;
@@ -244,7 +248,7 @@ function authDlg(mode,note){
 ${su?`<label for="a-name">Your name</label><input id="a-name" maxlength="40" autocomplete="name">`:""}
 <label for="a-email">Email</label><input id="a-email" type="email" autocomplete="email" required>
 <label for="a-pass">Password${su?" (at least 8 characters)":""}</label><input id="a-pass" type="password" autocomplete="${su?"new-password":"current-password"}" required>
-${su?`<label for="a-reg">Where are you? (optional)</label><select id="a-reg">${regOpts("","Choose your region")}</select><label class="chk" style="margin-top:14px"><input type="checkbox" id="a-ok"> <span>I am 18 or older, or I have a parent or guardian's permission. I agree to the <a href="#/safety" data-close>rules and privacy notice</a>.</span></label>`:""}
+${su?`<label for="a-reg">State / province / region (optional)</label><input id="a-reg" maxlength="60" placeholder="Your region"><label class="chk" style="margin-top:14px"><input type="checkbox" id="a-ok"> <span>I am 18 or older, or I have a parent or guardian's permission. I agree to the <a href="#/safety" data-close>rules and privacy notice</a>.</span></label>`:""}
 <p class="err" id="a-err" role="alert"></p>
 <div class="acts"><button class="btn" type="submit">${su?"Sign up":"Log in"}</button><button type="button" class="btn alt" data-close>Cancel</button></div>
 <p class="note" style="margin-top:14px">${su?'Already have an account? <button type="button" class="lnk" data-act="login">Log in</button>':'New here? <button type="button" class="lnk" data-act="signup">Create an account</button> · <button type="button" class="lnk" data-act="forgot">Forgot password?</button>'}</p></form>`);
@@ -282,21 +286,25 @@ const isUnread=c=>sess&&c.last_sender&&c.last_sender!==sess.user.id&&new Date(c.
 async function pollUnread(){if(!sess||!READY||document.hidden)return;try{const r=await http("/rest/v1/conversations?"+qs([["select","id,buyer_id,seller_id,last_sender,last_message_at,buyer_last_read,seller_last_read"],["order","last_message_at.desc"],["limit","100"]]));const n=r.filter(isUnread).length;if(n!==unreadCount){unreadCount=n;renderHeader()}}catch(e){}}
 
 /* ================= data helpers ================= */
-const SAMPLE=[["Samsung Galaxy A54 128GB","Mobile phones","Like new",14500,"Region VII (Central Visayas)","Cebu City","Ana","Complete with box and charger."],["Study table with drawer","Home and furniture","Used",1200,"NCR (Metro Manila)","Quezon City","Ben","Sturdy wood. Pick up only."],["Free: used school books (Grade 7)","Books and school","Used",0,"Region XI (Davao)","Davao City","Carla","Give away to anyone who needs them."],["Sewing machine (portable)","Sewing and fabric","Used",3500,"Region III (Central Luzon)","Angeles City","Dina","Works well. Includes extra needles."],["Gardening tool set","Tools","New",450,"Region VI (Western Visayas)","Iloilo City","Eli","Trowel, fork, and gloves."],["Basketball (size 7)","Sports","Like new",300,"Region X (Northern Mindanao)","Cagayan de Oro","Fe","Barely used."]].map((a,i)=>({id:"d"+i,title:a[0],category:a[1],condition:a[2],price:a[3],region:a[4],city:a[5],seller:{display_name:a[6],region:a[4],created_at:new Date(Date.now()-9e9).toISOString()},description:a[7],thumbs:[],photos:[],status:"available",created_at:new Date(Date.now()-(i+1)*9e6).toISOString(),user_id:"demo"}));
-const PAGE=24,LSEL="id,title,price,category,condition,region,city,thumbs,created_at,status,user_id,seller:profiles(display_name)";
+const SAMPLE=[["Samsung Galaxy A54 128GB","Mobile phones","Like new",14500,"Region VII (Central Visayas)","Cebu City","Ana","Complete with box and charger."],["Study table with drawer","Home and furniture","Used",1200,"NCR (Metro Manila)","Quezon City","Ben","Sturdy wood. Pick up only."],["Free: used school books (Grade 7)","Books and school","Used",0,"Region XI (Davao)","Davao City","Carla","Give away to anyone who needs them."],["Sewing machine (portable)","Sewing and fabric","Used",3500,"Region III (Central Luzon)","Angeles City","Dina","Works well. Includes extra needles."],["Gardening tool set","Tools","New",450,"Region VI (Western Visayas)","Iloilo City","Eli","Trowel, fork, and gloves."],["Basketball (size 7)","Sports","Like new",300,"Region X (Northern Mindanao)","Cagayan de Oro","Fe","Barely used."]].map((a,i)=>({id:"d"+i,title:a[0],category:a[1],condition:a[2],price:a[3],region:a[4],city:a[5],seller:{display_name:a[6],region:a[4],created_at:new Date(Date.now()-9e9).toISOString()},description:a[7],thumbs:[],photos:[],status:"available",country_code:"PH",currency_code:"PHP",created_at:new Date(Date.now()-(i+1)*9e6).toISOString(),user_id:"demo"}));
+const PAGE=24,LSEL="id,title,price,currency_code,country_code,category,condition,region,city,thumbs,created_at,status,user_id";
 async function fetchListings(f,offset){
- if(DEMO){let a=SAMPLE.filter(l=>(!f.cat||l.category===f.cat)&&(!f.region||l.region===f.region)&&(!f.q||(l.title+" "+l.description).toLowerCase().includes(f.q.toLowerCase()))&&(!f.free||l.price===0)&&(f.min===""||l.price>=+f.min)&&(f.max===""||l.price<=+f.max));if(f.sort==="low")a.sort((x,y)=>x.price-y.price);if(f.sort==="high")a.sort((x,y)=>y.price-x.price);return a.slice(offset,offset+PAGE)}
+ if(DEMO){let a=SAMPLE.filter(l=>(!f.cat||l.category===f.cat)&&(!f.region||(l.country_code||"PH")===f.region)&&(!f.q||(l.title+" "+l.description).toLowerCase().includes(f.q.toLowerCase()))&&(!f.free||l.price===0)&&(f.min===""||l.price>=+f.min)&&(f.max===""||l.price<=+f.max));if(f.sort==="low")a.sort((x,y)=>x.price-y.price);if(f.sort==="high")a.sort((x,y)=>y.price-x.price);return a.slice(offset,offset+PAGE)}
  const p=[["select",LSEL],["status","eq.available"]];
  const t=(f.q||"").replace(/[,()*%\\:"]/g," ").replace(/\s+/g," ").trim();if(t)p.push(["or",`(title.ilike.*${t}*,description.ilike.*${t}*)`]);
- if(f.cat)p.push(["category","eq."+f.cat]);if(f.region)p.push(["region","eq."+f.region]);
+ if(f.cat)p.push(["category","eq."+f.cat]);if(f.region)p.push(["country_code","eq."+f.region]);
  if(f.free)p.push(["price","eq.0"]);else{if(f.min!=="")p.push(["price","gte."+f.min]);if(f.max!=="")p.push(["price","lte."+f.max])}
  p.push(["order",f.sort==="low"?"price.asc,created_at.desc":f.sort==="high"?"price.desc,created_at.desc":"created_at.desc"],["limit",PAGE],["offset",offset]);
- return http("/rest/v1/listings?"+qs(p))}
+ const rows=await http("/rest/v1/listings?"+qs(p));return attachSellerProfiles(rows)}
+async function attachSellerProfiles(rows){
+ const ids=[...new Set((rows||[]).map(x=>x.user_id).filter(Boolean))];if(!ids.length)return rows||[];
+ try{const ps=await http("/rest/v1/profiles?"+qs([["select","id,display_name,region,city,created_at"],["id","in.("+ids.join(",")+")"]]));const by=Object.fromEntries(ps.map(x=>[x.id,x]));return rows.map(x=>({...x,seller:by[x.user_id]||{}}))}catch(e){return rows.map(x=>({...x,seller:{}}))}
+}
 async function fetchListing(id){
  if(DEMO)return SAMPLE.find(l=>l.id===id)||null;
  if(!UUIDRE.test(id))return null;
- const r=await http("/rest/v1/listings?"+qs([["id","eq."+id],["select","*,seller:profiles(display_name,region,city,created_at)"]]));return r&&r[0]||null}
-const cardHtml=l=>`<a class="card" href="#/listing/${esc(l.id)}">${l.status==="sold"?'<span class="sold">SOLD</span>':""}<div class="im">${l.thumbs&&l.thumbs[0]?`<img src="${esc(pub(l.thumbs[0]))}" alt="" loading="lazy">`:`<span class="ph">${emoOf(l.category)}</span>`}</div><div class="tx"><div class="pr ${Number(l.price)===0?"free":""}">${peso(l.price)}</div><h3>${esc(l.title)}</h3><div class="mt">${esc(l.city||"")}${l.city?", ":""}${esc((l.region||"").replace(/ \(.*\)/,""))}</div><div class="mt">${ago(l.created_at)}</div></div></a>`;
+ const r=await http("/rest/v1/listings?"+qs([["id","eq."+id],["select","*"]]));if(!r||!r[0])return null;return (await attachSellerProfiles(r))[0]}
+const cardHtml=l=>`<a class="card" href="#/listing/${esc(l.id)}">${l.status==="sold"?'<span class="sold">SOLD</span>':""}<div class="im">${l.thumbs&&l.thumbs[0]?`<img src="${esc(pub(l.thumbs[0]))}" alt="" loading="lazy">`:`<span class="ph">${emoOf(l.category)}</span>`}</div><div class="tx"><div class="pr ${Number(l.price)===0?"free":""}">${formatPrice(l.price,l.currency_code||"PHP")}</div><h3>${esc(l.title)}</h3><div class="mt">${esc(l.city||"")}${l.city?", ":""}${esc((l.region||"").replace(/ \(.*\)/,""))}${l.country_code?" · "+esc(countryName(l.country_code)):""}</div><div class="mt">${ago(l.created_at)}</div></div></a>`;
 function backendNeeded(){if(READY&&!DEMO)return false;toast("Connect your database to use this.");location.hash="#/setup";return true}
 const saved=()=>{try{return JSON.parse(localStorage.getItem("mk-saved"))||[]}catch(e){return[]}};
 const setSaved=a=>{try{localStorage.setItem("mk-saved",JSON.stringify(a))}catch(e){}};
@@ -306,17 +314,17 @@ let timers=[];const stopTimers=()=>{timers.forEach(clearInterval);timers=[]};
 const F={q:"",cat:"",region:"",min:"",max:"",free:false,sort:"new"};let gridReq=0,gridOff=0;
 function home(){
  view.innerHTML=`${DEMO?`<div class="note-bar">Preview mode with sample items. <a href="#/setup">Connect your database</a> to post, add photos, and chat.</div>`:""}
-<section class="hero"><h1>Marketplace</h1><p>Buy, sell and give things away across the Philippines.</p></section>
+<section class="hero"><h1>Marketplace</h1><p>Buy, sell and give things away with people around the world.</p></section>
 <div class="filters"><label class="search"><svg class="ic" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.500-3.500"/></svg><input id="q" type="search" placeholder="Search Marketplace" aria-label="Search" autocomplete="off" value="${esc(F.q)}"></label>
-<select id="region" aria-label="Region">${regOpts(F.region,"Anywhere in the Philippines")}</select>
+<select id="country" aria-label="Country"><option value="">Anywhere in the world</option>${countryOpts(F.region)}</select>
 <select id="sort" aria-label="Sort"><option value="new"${F.sort==="new"?" selected":""}>Newest</option><option value="low"${F.sort==="low"?" selected":""}>Price: low to high</option><option value="high"${F.sort==="high"?" selected":""}>Price: high to low</option></select></div>
 <div class="cats" id="cats"></div>
-<details class="more"><summary>More filters</summary><div class="row2"><div><label for="min">Min price (₱)</label><input id="min" type="number" min="0" value="${esc(F.min)}"></div><div><label for="max">Max price (₱)</label><input id="max" type="number" min="0" value="${esc(F.max)}"></div></div><label class="chk"><input type="checkbox" id="free"${F.free?" checked":""}> <span>Free items only</span></label></details>
+<details class="more"><summary>More filters</summary><div class="row2"><div><label for="min">Minimum amount (listing currency)</label><input id="min" type="number" min="0" value="${esc(F.min)}"></div><div><label for="max">Maximum amount (listing currency)</label><input id="max" type="number" min="0" value="${esc(F.max)}"></div></div><p class="note">Price filters compare the numeric amount only. Listings remain displayed in their own currency; no exchange-rate conversion is applied.</p><label class="chk"><input type="checkbox" id="free"${F.free?" checked":""}> <span>Free items only</span></label></details>
 <div id="grid" class="grid" aria-live="polite"></div><div id="more" class="center"></div>`;
  const cats=()=>{$("#cats").innerHTML=[["","All"],...CATS.map(c=>[c[0],c[1]+" "+c[0]])].map(c=>`<button class="cat" data-cat="${esc(c[0])}" aria-pressed="${F.cat===c[0]}">${esc(c[1])}</button>`).join("")};cats();
  let deb;const reload=()=>{cats();loadGrid(true)};
  $("#q").oninput=e=>{F.q=e.target.value;clearTimeout(deb);deb=setTimeout(reload,300)};
- $("#region").onchange=e=>{F.region=e.target.value;reload()};$("#sort").onchange=e=>{F.sort=e.target.value;reload()};
+ $("#country").onchange=e=>{F.region=e.target.value;reload()};$("#sort").onchange=e=>{F.sort=e.target.value;reload()};
  $("#min").onchange=e=>{F.min=e.target.value;reload()};$("#max").onchange=e=>{F.max=e.target.value;reload()};$("#free").onchange=e=>{F.free=e.target.checked;reload()};
  $("#cats").onclick=e=>{const b=e.target.closest("[data-cat]");if(b){F.cat=b.dataset.cat;reload()}};
  loadGrid(true)}
@@ -337,7 +345,7 @@ async function listingView(id){
  const draw=()=>{$("#gm").innerHTML=ph.length?`<img src="${esc(pub(ph[cur]))}" alt="Photo ${cur+1} of ${ph.length} of ${esc(l.title)}">`:`<span class="ph">${emoOf(l.category)}</span>`;$$("#gt button").forEach((b,i)=>b.setAttribute("aria-current",i===cur))};
  const s=l.seller||{};
  view.innerHTML=`<p><a href="#/">← Back</a></p><div class="det"><div class="gal"><div class="main" id="gm" role="button" tabindex="0" aria-label="Open photo bigger"></div>${ph.length>1?`<div class="thumbs" id="gt">${(l.thumbs&&l.thumbs.length===ph.length?l.thumbs:ph).map((t,i)=>`<button data-i="${i}" aria-label="Photo ${i+1}"><img src="${esc(pub(t))}" alt=""></button>`).join("")}</div>`:""}</div>
-<div>${l.status==="sold"?'<p class="tag" style="background:var(--red);color:#fff">SOLD</p>':""}<h1>${esc(l.title)}</h1><div class="pr ${Number(l.price)===0?"free":""}">${peso(l.price)}</div><p class="mt">Posted ${ago(l.created_at)} · ${esc(l.city||"")}${l.city?", ":""}${esc(l.region)}</p>
+<div>${l.status==="sold"?'<p class="tag" style="background:var(--red);color:#fff">SOLD</p>':""}<h1>${esc(l.title)}</h1><div class="pr ${Number(l.price)===0?"free":""}">${formatPrice(l.price,l.currency_code||"PHP")}</div><p class="mt">Posted ${ago(l.created_at)} · ${esc(l.city||"")}${l.city?", ":""}${esc(l.region||"")}${l.country_code?" · "+esc(countryName(l.country_code)):""}</p>
 <div><span class="tag">${esc(l.category)}</span><span class="tag">${esc(l.condition)}</span></div>
 ${l.description?`<p class="desc">${esc(l.description)}</p>`:""}
 <div class="seller"><div class="av" aria-hidden="true">${esc((s.display_name||"?").charAt(0).toUpperCase())}</div><div><b>${esc(s.display_name||"Seller")}</b><div class="mt">${esc((s.region||"").replace(/ \(.*\)/,""))}${s.created_at?" · member since "+new Date(s.created_at).toLocaleDateString("en-PH",{month:"short",year:"numeric"}):""}</div></div></div>
@@ -356,15 +364,15 @@ async function sellView(editId){
  if(backendNeeded())return;
  if(!sess){view.innerHTML='<div class="panel"><h2>Log in to sell</h2><p>Create a free account or log in to post an item.</p><div class="acts"><button class="btn" data-act="login">Log in</button><button class="btn alt" data-act="signup">Create account</button></div></div>';return}
  let l=null;if(editId){view.innerHTML='<p class="none"><span class="sp"></span> Loading…</p>';l=await fetchListing(editId);if(!l||l.user_id!==sess.user.id){view.innerHTML='<div class="panel"><h2>You cannot edit this item</h2><a class="btn" href="#/">Back</a></div>';return}}
- const v=l||{title:"",description:"",price:"",category:"",condition:"Used",region:(me&&me.region)||"",city:(me&&me.city)||""};
+ const v=l||{title:"",description:"",price:"",category:"",condition:"Used",region:(me&&me.region)||"",city:(me&&me.city)||"",country_code:"PH",currency_code:"PHP"};
  let files=[];const conv=photoPipeline();
  view.innerHTML=`<p><a href="#/">← Back</a></p><form class="panel" id="sf" novalidate><h2>${l?"Edit your item":"Sell or give away"}</h2>
 ${l?`<p class="note">To change photos, remove this item and post it again.</p>`:`<label>Photos <span class="note">(up to 5, the first is the cover)</span></label><div class="photos" id="ph"></div><input id="pf" type="file" accept="image/*" multiple hidden>`}
 <label for="s-title">Title</label><input id="s-title" maxlength="80" value="${esc(v.title)}" placeholder="What are you selling?">
 <div class="row2"><div><label for="s-cat">Category</label><select id="s-cat"><option value="">Choose…</option>${CATS.map(c=>`<option${c[0]===v.category?" selected":""}>${esc(c[0])}</option>`).join("")}</select></div><div><label for="s-cond">Condition</label><select id="s-cond">${["New","Like new","Used"].map(c=>`<option${c===v.condition?" selected":""}>${c}</option>`).join("")}</select></div></div>
-<div class="row2"><div><label for="s-price">Price (₱)</label><input id="s-price" type="number" min="0" max="10000000" step="0.01" value="${v.price===""?"":esc(v.price)}" placeholder="0"></div><div><label>&nbsp;</label><label class="chk"><input type="checkbox" id="s-free"${l&&Number(l.price)===0?" checked":""}> <span>Give away for free</span></label></div></div>
+<div class="row2"><div><label for="s-price">Price</label><input id="s-price" type="number" min="0" max="10000000" step="0.01" value="${v.price===""?"":esc(v.price)}" placeholder="0"></div><div><label>&nbsp;</label><label class="chk"><input type="checkbox" id="s-free"${l&&Number(l.price)===0?" checked":""}> <span>Give away for free</span></label></div></div>
 <label for="s-desc">Description</label><textarea id="s-desc" maxlength="1000" placeholder="Size, brand, how it was used, where to meet…">${esc(v.description)}</textarea>
-<div class="row2"><div><label for="s-reg">Region</label><select id="s-reg">${regOpts(v.region,"Choose region")}</select></div><div><label for="s-city">City or town</label><input id="s-city" maxlength="60" value="${esc(v.city||"")}"></div></div>
+<div class="row2"><div><label for="s-country">Country</label><select id="s-country">${countryOpts(v.country_code||"PH")}</select></div><div><label for="s-currency">Currency</label><select id="s-currency">${currencyOpts(v.currency_code||"PHP")}</select></div></div><div class="row2"><div><label for="s-reg">State / province / region</label><input id="s-reg" maxlength="60" value="${esc(v.region||"")}" placeholder="State, province or region"></div><div><label for="s-city">City or town</label><input id="s-city" maxlength="60" value="${esc(v.city||"")}"></div></div>
 <label class="chk" style="margin-top:16px"><input type="checkbox" id="s-ok"> <span>This item is allowed (see <a href="#/safety" target="_blank" rel="noopener">the rules</a>) and I am 18 or older, or I have a parent or guardian's permission.</span></label>
 <p class="err" id="s-err" role="alert"></p><div class="acts"><button class="btn" type="submit">${l?"Save changes":"Post item"}</button><a class="btn alt" href="#/">Cancel</a></div></form>`;
  $("#s-free").onchange=e=>{$("#s-price").disabled=e.target.checked;if(e.target.checked)$("#s-price").value="0"};if($("#s-free").checked)$("#s-price").disabled=true;
@@ -377,10 +385,10 @@ ${l?`<p class="note">To change photos, remove this item and post it again.</p>`:
   if(!g("#s-cat"))return err("Please choose a category.");
   if(g("#s-price")===""&&!$("#s-free").checked)return err("Please enter a price, or tick Give away for free.");
   if(!(price>=0&&price<=10000000))return err("Price must be between 0 and 10,000,000.");
-  if(!g("#s-reg"))return err("Please choose your region so buyers know where you are.");
+  if(!g("#s-country"))return err("Please choose a country.");if(!g("#s-currency"))return err("Please choose a currency.");
   if(!$("#s-ok").checked)return err("Please tick the confirmation box.");
   err("");const btn=e.submitter;btn.disabled=true;const label=btn.textContent;
-  const body={title:g("#s-title"),description:g("#s-desc"),price,category:g("#s-cat"),condition:g("#s-cond"),region:g("#s-reg"),city:g("#s-city")};
+  const body={title:g("#s-title"),description:g("#s-desc"),price,currency_code:g("#s-currency").toUpperCase(),country_code:g("#s-country").toUpperCase(),category:g("#s-cat"),condition:g("#s-cond"),region:g("#s-reg"),city:g("#s-city")};
   const up=[];
   try{
    if(l){await http("/rest/v1/listings?id=eq."+l.id,{method:"PATCH",body,headers:{Prefer:"return=minimal"},retry:false});toast("Saved.");location.hash="#/listing/"+l.id;return}
@@ -402,7 +410,7 @@ async function startChat(id){
   if(!r.length){try{r=await http("/rest/v1/conversations",{method:"POST",body:{listing_id:id,seller_id:l.user_id},headers:{Prefer:"return=representation"},retry:false})}catch(e){r=await http("/rest/v1/conversations?"+qs([["listing_id","eq."+id],["buyer_id","eq."+sess.user.id],["select","id"]]));if(!r.length)throw e}}
   location.hash="#/chat/"+r[0].id}catch(e){const b=$("#lerr");if(b)b.textContent=e.message;else toast(e.message)}}
 
-const CSEL="*,listing:listings(id,title,price,thumbs,status,category),buyer:profiles!conversations_buyer_fk(display_name),seller:profiles!conversations_seller_fk(display_name)";
+const CSEL="*,listing:listings(id,title,price,currency_code,country_code,thumbs,status,category),buyer:profiles!conversations_buyer_fk(display_name),seller:profiles!conversations_seller_fk(display_name)";
 function needAuthView(msg){view.innerHTML=`<div class="panel"><h2>${esc(msg)}</h2><div class="acts"><button class="btn" data-act="login">Log in</button><button class="btn alt" data-act="signup">Create account</button></div></div>`}
 async function messagesView(){
  if(backendNeeded())return;if(!sess)return needAuthView("Log in to see your messages");
@@ -420,7 +428,7 @@ async function chatView(id){
  if(!c){view.innerHTML='<div class="panel"><h2>Chat not found</h2><a class="btn" href="#/messages">Back to messages</a></div>';return}
  const meId=sess.user.id,mineBuyer=c.buyer_id===meId,oid=mineBuyer?c.seller_id:c.buyer_id,o=(mineBuyer?c.seller:c.buyer)||{},l=c.listing;
  let msgs=[],lastAt=null,blocked=false,busy=false;
- view.innerHTML=`<div class="chat"><div class="chead"><a href="#/messages" aria-label="Back to messages">←</a>${l?`<a class="th" href="#/listing/${esc(l.id)}">${l.thumbs&&l.thumbs[0]?`<img src="${esc(pub(l.thumbs[0]))}" alt="">`:emoOf(l.category)}</a>`:""}<div style="flex:1;min-width:140px"><b>${esc(o.display_name||"User")}</b><div class="mt">${l?`<a href="#/listing/${esc(l.id)}">${esc(l.title)}</a> · ${peso(l.price)}`:"Item removed"}</div></div><button class="btn alt sm" data-act="chatmenu">⋯</button></div><div class="msgs" id="ms" aria-live="polite"></div><div id="qk"></div><div id="cp"></div></div>`;
+ view.innerHTML=`<div class="chat"><div class="chead"><a href="#/messages" aria-label="Back to messages">←</a>${l?`<a class="th" href="#/listing/${esc(l.id)}">${l.thumbs&&l.thumbs[0]?`<img src="${esc(pub(l.thumbs[0]))}" alt="">`:emoOf(l.category)}</a>`:""}<div style="flex:1;min-width:140px"><b>${esc(o.display_name||"User")}</b><div class="mt">${l?`<a href="#/listing/${esc(l.id)}">${esc(l.title)}</a> · ${formatPrice(l.price,l.currency_code||"PHP")}`:"Item removed"}</div></div><button class="btn alt sm" data-act="chatmenu">⋯</button></div><div class="msgs" id="ms" aria-live="polite"></div><div id="qk"></div><div id="cp"></div></div>`;
  const hm=t=>new Date(t).toLocaleTimeString("en-PH",{hour:"numeric",minute:"2-digit"});
  const draw=()=>{const el=$("#ms");if(!el)return;const near=el.scrollHeight-el.scrollTop-el.clientHeight<120;let day="",h="";
   for(const m of msgs){const d=new Date(m.created_at).toDateString();if(d!==day){day=d;h+=`<div class="day">${new Date(m.created_at).toLocaleDateString("en-PH",{weekday:"short",month:"short",day:"numeric"})}</div>`}
@@ -445,13 +453,13 @@ async function chatView(id){
 async function meView(){
  if(backendNeeded())return;if(!sess)return needAuthView("Log in to see your account");
  if(!me)await loadMe();
- view.innerHTML=`<h1 style="font-size:1.6rem;margin:0 0 12px">My account</h1><form class="panel" id="pf2" novalidate><h2>Profile</h2><p class="note">${esc(sess.user.email||"")}</p><label for="p-name">Display name</label><input id="p-name" maxlength="40" value="${esc(me.display_name)}"><div class="row2"><div><label for="p-reg">Region</label><select id="p-reg">${regOpts(me.region||"","Choose region")}</select></div><div><label for="p-city">City or town</label><input id="p-city" maxlength="60" value="${esc(me.city||"")}"></div></div><p class="err" id="p-err" role="alert"></p><div class="acts"><button class="btn" type="submit">Save profile</button><button type="button" class="btn alt" data-act="logout">Log out</button></div></form>
+ view.innerHTML=`<h1 style="font-size:1.6rem;margin:0 0 12px">My account</h1><form class="panel" id="pf2" novalidate><h2>Profile</h2><p class="note">${esc(sess.user.email||"")}</p><label for="p-name">Display name</label><input id="p-name" maxlength="40" value="${esc(me.display_name)}"><div class="row2"><div><label for="p-reg">State / province / region</label><input id="p-reg" maxlength="60" value="${esc(me.region||"")}"></div><div><label for="p-city">City or town</label><input id="p-city" maxlength="60" value="${esc(me.city||"")}"></div></div><p class="err" id="p-err" role="alert"></p><div class="acts"><button class="btn" type="submit">Save profile</button><button type="button" class="btn alt" data-act="logout">Log out</button></div></form>
 <div class="panel"><h2>My items</h2><div id="mine"><p class="none"><span class="sp"></span> Loading…</p></div></div>
 <div class="panel"><h2>Delete my account</h2><p class="note">This removes your profile, items, and messages for good.</p><button class="btn bad" data-act="delacct">Delete my account</button></div>`;
  $("#pf2").onsubmit=async e=>{e.preventDefault();const n=$("#p-name").value.trim();if(n.length<2)return $("#p-err").textContent="Please enter a name.";
   try{await http("/rest/v1/profiles?id=eq."+sess.user.id,{method:"PATCH",body:{display_name:n,region:$("#p-reg").value||null,city:$("#p-city").value.trim()||null},headers:{Prefer:"return=minimal"},retry:false});await loadMe();toast("Profile saved.");$("#p-err").textContent=""}catch(x){$("#p-err").textContent=x.message}};
- try{const r=await http("/rest/v1/listings?"+qs([["user_id","eq."+sess.user.id],["status","neq.removed"],["select","id,title,price,thumbs,status,category,created_at"],["order","created_at.desc"]]));
-  $("#mine").innerHTML=r.length?r.map(l=>`<div class="mine"><div class="th">${l.thumbs&&l.thumbs[0]?`<img src="${esc(pub(l.thumbs[0]))}" alt="">`:emoOf(l.category)}</div><div class="tt"><a href="#/listing/${esc(l.id)}"><b>${esc(l.title)}</b></a><div class="mt">${peso(l.price)} · ${l.status==="sold"?"Sold":"Available"} · ${ago(l.created_at)}</div></div><a class="btn alt sm" href="#/edit/${esc(l.id)}">Edit</a>${l.status==="sold"?`<button class="btn alt sm" data-act="avail" data-id="${esc(l.id)}">Mark available</button>`:`<button class="btn alt sm" data-act="sold" data-id="${esc(l.id)}">Mark sold</button>`}<button class="btn bad sm" data-act="remove" data-id="${esc(l.id)}">Remove</button></div>`).join(""):'<p class="none">You have no items yet. <a href="#/sell">Sell something</a>.</p>'}
+ try{const r=await http("/rest/v1/listings?"+qs([["user_id","eq."+sess.user.id],["status","neq.removed"],["select","id,title,price,currency_code,country_code,thumbs,status,category,created_at"],["order","created_at.desc"]]));
+  $("#mine").innerHTML=r.length?r.map(l=>`<div class="mine"><div class="th">${l.thumbs&&l.thumbs[0]?`<img src="${esc(pub(l.thumbs[0]))}" alt="">`:emoOf(l.category)}</div><div class="tt"><a href="#/listing/${esc(l.id)}"><b>${esc(l.title)}</b></a><div class="mt">${formatPrice(l.price,l.currency_code||"PHP")} · ${l.status==="sold"?"Sold":"Available"} · ${ago(l.created_at)}</div></div><a class="btn alt sm" href="#/edit/${esc(l.id)}">Edit</a>${l.status==="sold"?`<button class="btn alt sm" data-act="avail" data-id="${esc(l.id)}">Mark available</button>`:`<button class="btn alt sm" data-act="sold" data-id="${esc(l.id)}">Mark sold</button>`}<button class="btn bad sm" data-act="remove" data-id="${esc(l.id)}">Remove</button></div>`).join(""):'<p class="none">You have no items yet. <a href="#/sell">Sell something</a>.</p>'}
  catch(e){$("#mine").innerHTML=`<p class="none">Could not load. ${esc(e.message)}</p>`}}
 
 async function savedView(){
