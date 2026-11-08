@@ -5,5 +5,5 @@
 window.MARKET_CONFIG = {
   url: "https://xybfspqdwoxraboneixr.supabase.co",
   key: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh5YmZzcHFkd294cmFib25laXhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM5Mzc3NTcsImV4cCI6MjEwOTUxMzc1N30.F9dohP2EW9TK7YW5EEpahCEeOiHqSzCFgebkNVSs-OY",
-  contact: "abhyaysb@gmail.com"
+  contact: ""
 };
